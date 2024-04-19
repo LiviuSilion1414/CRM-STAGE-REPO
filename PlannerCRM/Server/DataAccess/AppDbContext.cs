@@ -34,7 +34,6 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         base.OnModelCreating(modelBuilder);
     }
 
-    
     public DbSet<Employee> Employees { get; set; }
     public DbSet<EmployeeRole> EmployeeRoles { get; set; }
     public DbSet<EmployeeWithRole> EmployeeWithRoles { get; set; }
@@ -47,11 +46,8 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
     public DbSet<FirmClient> Clients { get; set; }
     public DbSet<WorkOrder> WorkOrders { get; set; }
     public DbSet<Activity> Activities { get; set; }
-    public DbSet<Employee> Employees { get; set; }
-    public DbSet<EmployeeRole> EmployeeRoles { get; set; }
-    public DbSet<FirmClient> Clients { get; set; }
     public DbSet<EmployeeActivity> EmployeeActivity { get; set; }
-    
+
     public DbSet<WorkOrderCost> WorkOrderCosts { get; set; }
     public DbSet<WorkTimeRecord> WorkTimeRecords { get; set; }
     public DbSet<ClientWorkOrder> ClientWorkOrders { get; set; }
