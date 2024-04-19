@@ -49,39 +49,9 @@ namespace PlannerCRM.Server.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("EmployeeRoles", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmployeeRoleClaims", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRoleClaim<int>");
 
                     b.UseTphMappingStrategy();
                 });
@@ -114,6 +84,7 @@ namespace PlannerCRM.Server.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
@@ -176,7 +147,7 @@ namespace PlannerCRM.Server.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
 
@@ -209,7 +180,7 @@ namespace PlannerCRM.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EmployeeClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserClaim<string>");
 
@@ -239,7 +210,7 @@ namespace PlannerCRM.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EmployeeLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserLogin<string>");
 
@@ -262,7 +233,7 @@ namespace PlannerCRM.Server.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("EmployeeWithRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<string>");
 
@@ -289,7 +260,7 @@ namespace PlannerCRM.Server.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("EmployeeTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserToken<string>");
 
@@ -432,9 +403,32 @@ namespace PlannerCRM.Server.Migrations
                     b.ToTable("ProfilePictures");
                 });
 
+            modelBuilder.Entity("PlannerCRM.Server.Models.EmployeeRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmployeeRoleClaims");
+                });
+
             modelBuilder.Entity("PlannerCRM.Server.Models.EmployeeSalary", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
                     b.Property<string>("EmployeeId")
@@ -603,13 +597,6 @@ namespace PlannerCRM.Server.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
                     b.HasDiscriminator().HasValue("EmployeeRole");
-                });
-
-            modelBuilder.Entity("PlannerCRM.Server.Models.EmployeeRoleClaim", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>");
-
-                    b.HasDiscriminator().HasValue("EmployeeRoleClaim");
                 });
 
             modelBuilder.Entity("PlannerCRM.Server.Models.Employee", b =>
