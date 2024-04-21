@@ -2,10 +2,10 @@ namespace PlannerCRM.Shared.Attributes;
 
 public class PasswordValidatorAttribute : ValidationAttribute
 {
-    private string _minimum;
-    private string _maximum;
+    private int _minimum;
+    private int _maximum;
 
-    public PasswordValidatorAttribute(string minimum, string maximum)
+    public PasswordValidatorAttribute(int minimum, int maximum)
     {
         _minimum = minimum;
         _maximum = maximum;
