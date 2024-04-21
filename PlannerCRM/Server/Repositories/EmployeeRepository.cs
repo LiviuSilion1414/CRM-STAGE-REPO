@@ -64,7 +64,7 @@ public class EmployeeRepository
                 );
 
 
-                //await _userManager.AddToRoleAsync(user, dto.Role.Tostring () ?? throw new ArgumentNullException(nameof(dto.Role), ExceptionsMessages.NULL_ARG));
+                //await _userManager.AddToRoleAsync(user, dto.Role.ToString() ?? throw new ArgumentNullException(nameof(dto.Role), ExceptionsMessages.NULL_ARG));
 
                 if (await _dbContext.SaveChangesAsync() == 0)
                 {
@@ -116,7 +116,7 @@ public class EmployeeRepository
             var user = await _userManager.FindByEmailAsync(email);
             if (user is not null)
             {
-                await _userManager.AddToRoleAsync(user, role.Tostring());
+                await _userManager.AddToRoleAsync(user, role.ToString());
             }
         }
         catch (Exception exc)
@@ -341,7 +341,7 @@ public class EmployeeRepository
                 if (isInRole)
                 {
                     var deleteRoleResult = await _userManager.RemoveFromRoleAsync(user, userRole);
-                    var reassignmentRoleResult = await _userManager.AddToRoleAsync(user, dto.Role.Tostring());
+                    var reassignmentRoleResult = await _userManager.AddToRoleAsync(user, dto.Role.ToString());
 
                     if (!deleteRoleResult.Succeeded || !reassignmentRoleResult.Succeeded)
                     {
@@ -510,7 +510,7 @@ public class EmployeeRepository
                 FullName = $"{em.FirstName} {em.LastName}",
                 Email = em.Email,
                 Role = em.Role
-                    .Tostring()
+                    .ToString()
                     .Replace('_', ' '),
                 EmployeeActivities = _dbContext.EmployeeActivity
                     .Where(ea => ea.EmployeeId == employeeId)

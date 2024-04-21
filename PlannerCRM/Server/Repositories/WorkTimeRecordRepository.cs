@@ -63,7 +63,7 @@ public class WorkTimeRecordRepository
         }
     }
 
-    public async Task DeleteAsync(string Id)
+    public async Task DeleteAsync(string id)
     {
         var workTimeRecordDelete = await _dbContext.WorkTimeRecords
             .SingleAsync(wtr => wtr.Id == id)

@@ -13,7 +13,7 @@ public class Base64Converter
         await imgFile.OpenReadStream().ReadAsync(buffers);
 
         var imageType = imgFile.ContentType;
-        var thumbnail = $"data:{imageType};base64,{Convert.ToBase64string(buffers)}";
+        var thumbnail = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
 
         return (thumbnail, imageType);
     }

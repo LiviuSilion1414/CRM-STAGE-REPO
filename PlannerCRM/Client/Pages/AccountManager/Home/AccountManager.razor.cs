@@ -39,7 +39,7 @@ public partial class AccountManager : ComponentBase
 
         _filteredList = _users
             .Where(us => us.FullName
-                .Contains(query, string Comparison.OrdinalIgnoreCase))
+                .Contains(query, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         StateHasChanged();

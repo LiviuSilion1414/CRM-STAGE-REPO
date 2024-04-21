@@ -86,7 +86,7 @@ public class ClientRepository
         }
     }
 
-    public async Task DeleteClientAsync(string Id)
+    public async Task DeleteClientAsync(string id)
     {
         try
         {
@@ -129,7 +129,7 @@ public class ClientRepository
             .SingleAsync();
     }
 
-    public async Task<ClientFormDto> GetClientForEditByIdAsync(string Id)
+    public async Task<ClientFormDto> GetClientForEditByIdAsync(string id)
     {
         return await _dbContext.Clients
             .Select(client =>
@@ -144,7 +144,7 @@ public class ClientRepository
             .SingleAsync(cl => cl.Id == id);
     }
 
-    public async Task<ClientDeleteDto> GetClientForDeleteByIdAsync(string Id)
+    public async Task<ClientDeleteDto> GetClientForDeleteByIdAsync(string id)
     {
         return await _dbContext.Clients
             .Select(client =>
@@ -198,7 +198,7 @@ public class ClientRepository
             .ToListAsync();
     }
 
-    public async Task<List<ClientViewDto>> SearchClientAsync(string clientId)
+    public async Task<List<ClientViewDto>> SearchClientByIdAsync(string clientId)
     {
         return await _dbContext.Clients
             .Select(cl => new ClientViewDto

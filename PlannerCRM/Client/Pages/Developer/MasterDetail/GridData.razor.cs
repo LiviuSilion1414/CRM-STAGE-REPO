@@ -85,11 +85,11 @@ public partial class GridData : ComponentBase
         _filteredList = _activities
             .Where(ac =>
                 ac.Name
-                    .Contains(query, string Comparison.OrdinalIgnoreCase) ||
+                    .Contains(query, StringComparison.OrdinalIgnoreCase) ||
                 ac.WorkOrderName
-                    .Contains(query, string Comparison.OrdinalIgnoreCase) ||
+                    .Contains(query, StringComparison.OrdinalIgnoreCase) ||
                 ac.ClientName
-                    .Contains(query, string Comparison.OrdinalIgnoreCase)
+                    .Contains(query, StringComparison.OrdinalIgnoreCase)
             )
             .ToList();
 

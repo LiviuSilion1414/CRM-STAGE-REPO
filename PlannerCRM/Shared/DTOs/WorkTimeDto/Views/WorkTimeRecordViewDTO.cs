@@ -4,7 +4,7 @@ public class WorkTimeRecordViewDto
 {
     public string Id { get; set; }
     public DateTime Date { get; set; }
-    public string Hours { get; set; }
+    public int Hours { get; set; }
     public decimal TotalPrice { get; set; }
 
     public string ActivityId { get; set; }

@@ -53,9 +53,9 @@ public partial class OperationManager : ComponentBase
                 {
                     return
                         wo.Name
-                            .Contains(query, string Comparison.OrdinalIgnoreCase) ||
+                            .Contains(query, StringComparison.OrdinalIgnoreCase) ||
                         wo.ClientName
-                            .Contains(query, string Comparison.OrdinalIgnoreCase);
+                            .Contains(query, StringComparison.OrdinalIgnoreCase);
                 })
             .ToList();
 
@@ -129,7 +129,7 @@ public partial class OperationManager : ComponentBase
     private void OnClickAddClient() =>
        _isCreateClientClicked = !_isCreateClientClicked;
 
-    public void OnClickDeleteClient(string Id)
+    public void OnClickDeleteClient(string id)
     {
         _isDeleteClientClicked = !_isDeleteClientClicked;
     }

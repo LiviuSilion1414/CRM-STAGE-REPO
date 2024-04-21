@@ -40,13 +40,13 @@ public partial class ClientsList : ComponentBase
     private void OnClickAddClient() =>
        _isCreateClientClicked = !_isCreateClientClicked;
 
-    private void OnClickEditClient(string Id)
+    private void OnClickEditClient(string id)
     {
         _isEditClientClicked = !_isEditClientClicked;
         _clientId = id;
     }
 
-    public void OnClickDeleteClient(string Id)
+    public void OnClickDeleteClient(string id)
     {
         _isDeleteClientClicked = !_isDeleteClientClicked;
         _clientId = id;

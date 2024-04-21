@@ -302,7 +302,7 @@ public class OperationManagerCrudService
         try
         {
             var response = await _http.GetAsync($"api/workorder/get/for/edit/{workOrderId}");
-            var jsonObject = await response.Content.ReadAsstring Async();
+            var jsonObject = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<WorkOrderFormDto>(jsonObject);
         }
@@ -374,7 +374,7 @@ public class OperationManagerCrudService
         }
     }
 
-    public async Task<List<ClientViewDto>> SearchClientAsync(string clientId)
+    public async Task<List<ClientViewDto>> SearchClientByIdAsync(string clientId)
     {
         try
         {

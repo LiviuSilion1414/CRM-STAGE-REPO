@@ -73,7 +73,7 @@
                                         @if (Model.ViewEmployeeActivity.Any()) {
                                             @foreach (var ea in Model.ViewEmployeeActivity) {
                                                 <tr>
-                                                    <td>@(ea.Employee.Role.Tostring ().Replace('_', ' '))</td>
+                                                    <td>@(ea.Employee.Role.ToString().Replace('_', ' '))</td>
                                                     <td>@ea.Employee.FullName</td>
                                                     <td> 
                                                         <i class="bi bi-envelope-at"></i>

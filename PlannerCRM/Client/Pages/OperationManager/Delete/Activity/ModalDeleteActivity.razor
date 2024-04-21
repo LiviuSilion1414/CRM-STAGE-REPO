@@ -11,11 +11,11 @@
         }
         <div class="modal-body">
             <p>Commessa: @_currentWorkOrder.Name 
-                <span>(@_currentWorkOrder.StartDate.Tostring ("dd/MM/yyyy") - @_currentWorkOrder.FinishDate.Tostring ("dd/MM/yyyy"))</span></p>
+                <span>(@_currentWorkOrder.StartDate.ToString("dd/MM/yyyy") - @_currentWorkOrder.FinishDate.ToString("dd/MM/yyyy"))</span></p>
             <p>Vuoi davvero eliminare questa attività?</p>
             <p> <strong>Nome:</strong> @_currentActivity.Name</p>
-            <p> <strong>Data d'inizio:</strong> @_currentActivity.StartDate.Tostring ("dd/MM/yyyy")</p>
-            <p> <strong>Data di fine:</strong> @_currentActivity.FinishDate.Tostring ("dd/MM/yyyy")</p>
+            <p> <strong>Data d'inizio:</strong> @_currentActivity.StartDate.ToString("dd/MM/yyyy")</p>
+            <p> <strong>Data di fine:</strong> @_currentActivity.FinishDate.ToString("dd/MM/yyyy")</p>
             <p> <strong>Dipendenti assegnati: </strong> </p>
             <div id="wrapper-card" class="card"> 
                 @foreach (var em in _currentActivity.Employees) {

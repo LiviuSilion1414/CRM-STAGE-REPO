@@ -33,7 +33,7 @@ public class CurrentUserInfoService
         try
         {
             return await _http
-                .Getstring Async("api/account/user/role");
+                .GetStringAsync("api/account/user/role");
         }
         catch (Exception exc)
         {

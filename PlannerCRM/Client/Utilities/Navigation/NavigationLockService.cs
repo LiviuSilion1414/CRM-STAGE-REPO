@@ -62,7 +62,7 @@ public class NavigationLockService
         if (!string.IsNullOrEmpty(role) && Enum.TryParse(role, out Roles parsedRole))
         {
             var url = parsedRole
-                .Tostring()
+                .ToString()
                 .ToLower()
                 .Replace('_', '-');
 

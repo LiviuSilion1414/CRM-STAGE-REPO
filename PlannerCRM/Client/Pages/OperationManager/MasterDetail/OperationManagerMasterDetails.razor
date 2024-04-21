@@ -21,8 +21,8 @@
                         <tr>
                             <td><i class="bi bi-puzzle"></i></td>
                             <td>@ac.Name</td>
-                            <td>@ac.StartDate.Tostring ("dd/MM/yyyy")</td>
-                            <td>@ac.FinishDate.Tostring ("dd/MM/yyyy")</td>
+                            <td>@ac.StartDate.ToString("dd/MM/yyyy")</td>
+                            <td>@ac.FinishDate.ToString("dd/MM/yyyy")</td>
                             <td>
                                 @foreach (var ea in ac.EmployeeActivity) {
                                     <tr>

@@ -71,7 +71,7 @@ public partial class ModalAddHours : ComponentBase
                 if (!response.IsSuccessStatusCode)
                 {
                     _isError = true;
-                    _message = await response.Content.ReadAsstring Async();
+                    _message = await response.Content.ReadAsStringAsync();
                 }
                 else
                 {

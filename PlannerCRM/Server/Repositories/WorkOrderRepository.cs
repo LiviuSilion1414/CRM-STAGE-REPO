@@ -107,7 +107,7 @@ public class WorkOrderRepository
 		}
 	}
 
-	public async Task DeleteAsync(string Id)
+	public async Task DeleteAsync(string id)
 	{
 		try
 		{
@@ -179,7 +179,7 @@ public class WorkOrderRepository
 		}
 	}
 
-	public async Task<WorkOrderDeleteDto> GetForDeleteByIdAsync(string Id)
+	public async Task<WorkOrderDeleteDto> GetForDeleteByIdAsync(string id)
 	{
 		return await _dbContext.WorkOrders
 			.Where(wo => !wo.IsDeleted && !wo.IsCompleted)
@@ -196,7 +196,7 @@ public class WorkOrderRepository
 			.SingleAsync(wo => wo.Id == id);
 	}
 
-	public async Task<WorkOrderViewDto> GetForViewByIdAsync(string Id)
+	public async Task<WorkOrderViewDto> GetForViewByIdAsync(string id)
 	{
 		return await _dbContext.WorkOrders
 			.Select(wo => new WorkOrderViewDto
@@ -211,7 +211,7 @@ public class WorkOrderRepository
 			.SingleAsync(wo => wo.Id == id);
 	}
 
-	public async Task<WorkOrderFormDto> GetForEditByIdAsync(string Id)
+	public async Task<WorkOrderFormDto> GetForEditByIdAsync(string id)
 	{
 		return await _dbContext.WorkOrders
 			.Where(wo => !wo.IsDeleted || !wo.IsCompleted)

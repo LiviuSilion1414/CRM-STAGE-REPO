@@ -57,7 +57,7 @@ public partial class ModalDeleteUser : ComponentBase
 
         if (!responseEmployee.IsSuccessStatusCode)
         {
-            _message = await responseEmployee.Content.ReadAsstring Async();
+            _message = await responseEmployee.Content.ReadAsStringAsync();
             _isError = true;
         }
         else
@@ -73,7 +73,7 @@ public partial class ModalDeleteUser : ComponentBase
 
         if (!responseEmployee.IsSuccessStatusCode)
         {
-            _message = await responseEmployee.Content.ReadAsstring Async();
+            _message = await responseEmployee.Content.ReadAsStringAsync();
             _isError = true;
         }
 

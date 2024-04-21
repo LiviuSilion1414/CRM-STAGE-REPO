@@ -48,7 +48,7 @@ public partial class ProjectManager : ComponentBase
     private void HandleSearchedElements(string query)
     {
         _filteredList = _workOrders
-            .Where(wo => wo.Name.Contains(query, string Comparison.OrdinalIgnoreCase))
+            .Where(wo => wo.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         StateHasChanged();

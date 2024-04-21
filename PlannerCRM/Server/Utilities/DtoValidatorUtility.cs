@@ -174,14 +174,14 @@ public class DtoValidatorUtillity
         return employeeExists is not null && userExists is not null;
     }
 
-    public async Task<FirmClient> ValidateDeleteClientAsync(string Id)
+    public async Task<FirmClient> ValidateDeleteClientAsync(string id)
     {
         return await _dbContext.Clients
             .SingleAsync(cl => cl.Id == id) ??
                 throw new KeyNotFoundException(ExceptionsMessages.IMPOSSIBLE_DELETE);
     }
 
-    public async Task<WorkOrder> ValidateDeleteWorkOrderAsync(string Id)
+    public async Task<WorkOrder> ValidateDeleteWorkOrderAsync(string id)
     {
         var hasRelationships = await _dbContext.EmployeeActivity
             .AnyAsync(ea => ea.Activity.WorkOrderId == id);
@@ -191,7 +191,7 @@ public class DtoValidatorUtillity
                 ?? throw new KeyNotFoundException(ExceptionsMessages.IMPOSSIBLE_DELETE);
     }
 
-    public async Task<Activity> ValidateDeleteActivityAsync(string Id)
+    public async Task<Activity> ValidateDeleteActivityAsync(string id)
     {
         return await _dbContext.Activities
             .SingleAsync(ac => ac.Id == id)

@@ -54,7 +54,7 @@ public partial class Login : ComponentBase
                 else
                 {
                     _isError = true;
-                    _message = await response.Content.ReadAsstring Async();
+                    _message = await response.Content.ReadAsStringAsync();
                 }
             }
             else

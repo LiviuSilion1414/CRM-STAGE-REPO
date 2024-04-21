@@ -82,13 +82,13 @@ public partial class GridDataWorkOrders : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickEditWorkOrder(string Id)
+    private void OnClickEditWorkOrder(string id)
     {
         _isEditWorkOrderClicked = !_isEditWorkOrderClicked;
         _workOrderId = id;
     }
 
-    public void OnClickDeleteWorkOrder(string Id)
+    public void OnClickDeleteWorkOrder(string id)
     {
         _isDeleteWorkOrderClicked = !_isDeleteWorkOrderClicked;
         _workOrderId = id;
