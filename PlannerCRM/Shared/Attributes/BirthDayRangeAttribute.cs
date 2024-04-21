@@ -2,10 +2,10 @@ namespace PlannerCRM.Shared.Attributes;
 
 public class BirthDayRangeAttribute : ValidationAttribute
 {
-    private readonly string _minimum;
-    private readonly string _maximum;
+    private readonly int _minimum;
+    private readonly int _maximum;
 
-    public BirthDayRangeAttribute(string minimum, string maximum)
+    public BirthDayRangeAttribute(int minimum, int maximum)
     {
         _minimum = minimum;
         _maximum = maximum;

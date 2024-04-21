@@ -1,9 +1,9 @@
 namespace PlannerCRM.Shared.Attributes;
 
-public class string IsNotNullOrEmptyAttribute : ValidationAttribute
+public class IsNotNullOrEmptyAttribute : ValidationAttribute
 {
     public override bool IsValid(object value)
-{
-    return !string.IsNullOrEmpty(value as string);
-}
+    {
+        return !string.IsNullOrEmpty(value as string);
+    }
 }

@@ -2,10 +2,10 @@ namespace PlannerCRM.Shared.Attributes;
 
 public partial class StrongPasswordValidatorAttribute : ValidationAttribute
 {
-    private string _minimum;
-    private string _maximum;
+    private int _minimum;
+    private int _maximum;
 
-    public StrongPasswordValidatorAttribute(string minimum, string maximum)
+    public StrongPasswordValidatorAttribute(int minimum, int maximum)
     {
         _minimum = minimum;
         _maximum = maximum;
@@ -20,10 +20,10 @@ public partial class StrongPasswordValidatorAttribute : ValidationAttribute
 
         if (value.GetType() == typeof(string))
         {
-            var string Content = value as string;
-            var string Length = string Content.Length;
+            var stringContent = value as string;
+            var stringLength = stringContent.Length;
 
-            return string Length >= _minimum && string Length <= _maximum && EmailRegex().IsMatch(string Content);
+            return stringLength >= _minimum && stringLength <= _maximum && EmailRegex().IsMatch(stringContent);
         }
 
         return false;
