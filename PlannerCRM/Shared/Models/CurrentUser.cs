@@ -1,3 +1,5 @@
+using PlannerCRM.Shared.DTOs.EmployeeProfilePictureDto;
+
 namespace PlannerCRM.Shared.Models;
 
 public class CurrentUser
