@@ -7,12 +7,12 @@ public class EmployeeController : ControllerBase
 {
     private readonly EmployeeRepository _repo;
     private readonly ILogger<EmployeeRepository> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<Employee> _userManager;
 
     public EmployeeController(
         EmployeeRepository repo,
         Logger<EmployeeRepository> logger,
-        UserManager<IdentityUser> userManager)
+        UserManager<Employee> userManager)
     {
         _repo = repo;
         _logger = logger;

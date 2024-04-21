@@ -8,14 +8,14 @@ public class EmployeeRepository
     private readonly AppDbContext _dbContext;
     private readonly DtoValidatorUtillity _validator;
     private readonly ILogger<DtoValidatorUtillity> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<Employee> _userManager;
+    private readonly RoleManager<EmployeeRole> _roleManager;
 
     public EmployeeRepository(
         AppDbContext dbContext,
         DtoValidatorUtillity validator,
-        UserManager<IdentityUser> userManager,
-        RoleManager<IdentityRole> roleManager,
+        UserManager<Employee> userManager,
+        RoleManager<EmployeeRole> roleManager,
         Logger<DtoValidatorUtillity> logger)
     {
         _dbContext = dbContext;
@@ -93,7 +93,7 @@ public class EmployeeRepository
     {
         try
         {
-            var user = new IdentityUser
+            var user = new Employee
             {
                 Email = dto.Email,
                 UserName = dto.Email,
