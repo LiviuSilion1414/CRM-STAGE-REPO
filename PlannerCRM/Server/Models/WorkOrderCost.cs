@@ -2,10 +2,10 @@ namespace PlannerCRM.Server.Models;
 
 public class WorkOrderCost
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
     public int WorkOrderId { get; set; }
-    public DateTime StartDate { get; set; } 
+    public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }
     public DateTime IssuedDate { get; set; }
     public bool IsCreated { get; init; }

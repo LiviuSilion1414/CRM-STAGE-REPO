@@ -2,8 +2,8 @@ namespace PlannerCRM.Shared.DTOs.ClientDto;
 
 public class ClientFormDto
 {
-    public int Id { get; set; }
-    
+    public string Id { get; set; }
+
     [Required(ErrorMessage = """ Campo "Nome" richiesto """)]
     public string Name { get; set; }
 

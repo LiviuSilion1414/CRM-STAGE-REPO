@@ -19,12 +19,14 @@ public partial class ClientsList : ComponentBase
     private int _clientId;
     private int _collectionSize;
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         _collectionSize = await OperationManagerService.GetClientsCollectionSizeAsync();
         _clients = await OperationManagerService.GetClientsPaginatedAsync();
     }
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _clients = new();
         _workOrders = new();
     }
@@ -38,12 +40,14 @@ public partial class ClientsList : ComponentBase
     private void OnClickAddClient() =>
        _isCreateClientClicked = !_isCreateClientClicked;
 
-    private void OnClickEditClient(int id) {
+    private void OnClickEditClient(string Id)
+    {
         _isEditClientClicked = !_isEditClientClicked;
         _clientId = id;
     }
 
-    public void OnClickDeleteClient(int id) {
+    public void OnClickDeleteClient(string Id)
+    {
         _isDeleteClientClicked = !_isDeleteClientClicked;
         _clientId = id;
     }

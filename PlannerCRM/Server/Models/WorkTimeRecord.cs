@@ -2,7 +2,7 @@ namespace PlannerCRM.Server.Models;
 
 public class WorkTimeRecord
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public DateTime Date { get; set; }
     public int Hours { get; set; }
     public decimal TotalPrice { get; set; }

@@ -2,7 +2,7 @@ namespace PlannerCRM.Shared.DTOs.EmployeeProfilePictureDto;
 
 public class ProfilePictureDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     public string EmployeeId { get; set; }
 

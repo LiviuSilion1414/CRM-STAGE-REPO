@@ -4,30 +4,34 @@ public class WorkTimeRecordRepository
 {
     private readonly AppDbContext _dbContext;
     private readonly DtoValidatorUtillity _validator;
-	private readonly ILogger<DtoValidatorUtillity> _logger;
+    private readonly ILogger<DtoValidatorUtillity> _logger;
 
     public WorkTimeRecordRepository(
-        AppDbContext db, 
-        DtoValidatorUtillity validator, 
-        Logger<DtoValidatorUtillity> logger) 
+        AppDbContext db,
+        DtoValidatorUtillity validator,
+        Logger<DtoValidatorUtillity> logger)
     {
-	    _dbContext = db;
-	    _validator = validator;
-		_logger = logger;
-	}
+        _dbContext = db;
+        _validator = validator;
+        _logger = logger;
+    }
 
-    public async Task AddAsync(WorkTimeRecordFormDto dto) {
-        try {
+    public async Task AddAsync(WorkTimeRecordFormDto dto)
+    {
+        try
+        {
             var isValid = _validator.ValidateWorkTime(dto);
 
-            if (isValid) {
+            if (isValid)
+            {
                 await _dbContext.WorkTimeRecords.AddAsync(
-                    new WorkTimeRecord {
+                    new WorkTimeRecord
+                    {
                         Id = dto.Id,
                         Date = dto.Date,
-                        Hours = dto.Hours 
+                        Hours = dto.Hours
                             ?? throw new ArgumentNullException(nameof(dto.Hours), ExceptionsMessages.NULL_ARG),
-                        TotalPrice = dto.TotalPrice + dto.Hours  
+                        TotalPrice = dto.TotalPrice + dto.Hours
                             ?? throw new ArgumentNullException(nameof(dto.Hours), ExceptionsMessages.NULL_ARG),
                         ActivityId = dto.ActivityId,
                         EmployeeId = dto.EmployeeId,
@@ -40,43 +44,53 @@ public class WorkTimeRecordRepository
                                 : throw new InvalidOperationException(ExceptionsMessages.IMPOSSIBLE_ADD)
                     }
                 );
-        
-				if (await _dbContext.SaveChangesAsync() == 0) {
-					throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
-				}
-            } else {
+
+                if (await _dbContext.SaveChangesAsync() == 0)
+                {
+                    throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
+                }
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
-            
+
             throw;
         }
     }
 
-    public async Task DeleteAsync(int id) {
+    public async Task DeleteAsync(string Id)
+    {
         var workTimeRecordDelete = await _dbContext.WorkTimeRecords
             .SingleAsync(wtr => wtr.Id == id)
                 ?? throw new KeyNotFoundException(ExceptionsMessages.OBJECT_NOT_FOUND);
-        
+
         _dbContext.WorkTimeRecords.Remove(workTimeRecordDelete);
-        
-        if (await _dbContext.SaveChangesAsync() == 0) {
+
+        if (await _dbContext.SaveChangesAsync() == 0)
+        {
             throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
         }
     }
-    
-    public async Task EditAsync(WorkTimeRecordFormDto dto) {
-        try {
+
+    public async Task EditAsync(WorkTimeRecordFormDto dto)
+    {
+        try
+        {
             var isValid = _validator.ValidateWorkTime(dto);
-            
-            if (isValid) {
+
+            if (isValid)
+            {
                 var model = await _dbContext.WorkTimeRecords
                     .SingleAsync(wtr => wtr.Id == dto.Id);
-        
+
                 model.Id = dto.Id;
                 model.Date = dto.Date;
-                model.Hours = dto.Hours 
+                model.Hours = dto.Hours
                     ?? throw new ArgumentNullException(nameof(dto.Hours), ExceptionsMessages.IMPOSSIBLE_EDIT);
                 model.TotalPrice = dto.TotalPrice;
                 model.ActivityId = dto.ActivityId;
@@ -85,35 +99,42 @@ public class WorkTimeRecordRepository
                 model.Employee = await _dbContext.Employees
                     .SingleAsync(em => !em.IsDeleted && !em.IsArchived && em.Id == dto.EmployeeId);
                 _dbContext.Update(model);
-        
-				if (await _dbContext.SaveChangesAsync() == 0) {
-					throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
-				}
-            } else {
+
+                if (await _dbContext.SaveChangesAsync() == 0)
+                {
+                    throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
+                }
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
-            
+
             throw;
         }
     }
 
-    public async Task<WorkTimeRecordViewDto> GetAsync(int workOrderId, int activityId, string employeeId) {
+    public async Task<WorkTimeRecordViewDto> GetAsync(int workOrderId, int activityId, string employeeId)
+    {
         var hasElements = await _dbContext.WorkTimeRecords
-            .AnyAsync(wtr => 
-                wtr.ActivityId == activityId && 
+            .AnyAsync(wtr =>
+                wtr.ActivityId == activityId &&
                 wtr.EmployeeId == employeeId);
-                
-        return hasElements 
+
+        return hasElements
             ? await _dbContext.WorkTimeRecords
-                .Select(wtr => new WorkTimeRecordViewDto {
+                .Select(wtr => new WorkTimeRecordViewDto
+                {
                     Id = wtr.Id,
                     Date = wtr.Date,
                     Hours = _dbContext.WorkTimeRecords
-                        .Where(wtr => 
-                            wtr.WorkOrderId == workOrderId && 
-                            wtr.ActivityId == activityId && 
+                        .Where(wtr =>
+                            wtr.WorkOrderId == workOrderId &&
+                            wtr.ActivityId == activityId &&
                             wtr.EmployeeId == employeeId)
                         .Distinct()
                         .Sum(wtrSum => wtrSum.Hours),
@@ -123,19 +144,21 @@ public class WorkTimeRecordRepository
                     EmployeeId = wtr.EmployeeId
                 })
                 .OrderByDescending(wtr => wtr.Hours)
-                .FirstAsync(wtr => 
-                    wtr.WorkOrderId == workOrderId && 
-                    wtr.ActivityId == activityId && 
+                .FirstAsync(wtr =>
+                    wtr.WorkOrderId == workOrderId &&
+                    wtr.ActivityId == activityId &&
                     wtr.EmployeeId == employeeId)
             : new();
     }
 
-    public async Task<List<WorkTimeRecordViewDto>> GetPaginatedWorkTimeRecordsAsync(int limit, int offset) {
+    public async Task<List<WorkTimeRecordViewDto>> GetPaginatedWorkTimeRecordsAsync(int limit, int offset)
+    {
         return await _dbContext.WorkTimeRecords
             .OrderBy(wtr => wtr.Id)
             .Skip(limit)
             .Take(offset)
-            .Select(wtr => new WorkTimeRecordViewDto {
+            .Select(wtr => new WorkTimeRecordViewDto
+            {
                 Id = wtr.Id,
                 Date = wtr.Date,
                 Hours = wtr.Hours,
@@ -146,17 +169,19 @@ public class WorkTimeRecordRepository
             .ToListAsync();
     }
 
-    public async Task<WorkTimeRecordViewDto> GetAllWorkTimeRecordsByEmployeeIdAsync(string employeeId) {
+    public async Task<WorkTimeRecordViewDto> GetAllWorkTimeRecordsByEmployeeIdAsync(string employeeId)
+    {
         return await _dbContext.WorkTimeRecords
-            .Select(wtr => 
-                new WorkTimeRecordViewDto {
+            .Select(wtr =>
+                new WorkTimeRecordViewDto
+                {
                     Id = wtr.Id,
                     Date = wtr.Date,
                     Hours = _dbContext.WorkTimeRecords
                         .Sum(wtrSum => wtrSum.Hours),
                     TotalPrice = wtr.TotalPrice,
                     ActivityId = wtr.ActivityId,
-                    EmployeeId = wtr.EmployeeId 
+                    EmployeeId = wtr.EmployeeId
                 })
             .SingleAsync(wtr => wtr.EmployeeId == employeeId);
     }

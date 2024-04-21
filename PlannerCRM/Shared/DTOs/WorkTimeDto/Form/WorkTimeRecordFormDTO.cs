@@ -3,7 +3,7 @@ namespace PlannerCRM.Shared.DTOs.WorkTimeDto.Form;
 public class WorkTimeRecordFormDto
 
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [Required(ErrorMessage = """ Campo "Data" richiesto. """)]
     public DateTime Date { get; set; }

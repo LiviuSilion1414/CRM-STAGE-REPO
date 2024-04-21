@@ -12,11 +12,12 @@ public partial class GridDataWorkOrders : ComponentBase
 
     private bool _isEditWorkOrderClicked;
     private bool _isDeleteWorkOrderClicked;
-    
+
     private int _workOrderId;
     private string _orderKey;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _currentWorkOrder = new();
         _orderTitles = new() {
             { "Stato", OnClickOrderByActive },
@@ -27,14 +28,17 @@ public partial class GridDataWorkOrders : ComponentBase
         };
     }
 
-    private void HandleOrdering(string key) {
-        if (_orderTitles.ContainsKey(key)) {
+    private void HandleOrdering(string key)
+    {
+        if (_orderTitles.ContainsKey(key))
+        {
             _orderTitles[key].Invoke();
             _orderKey = key;
         }
     }
 
-    private void OnClickOrderByActive() {
+    private void OnClickOrderByActive()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => !wo.IsArchived || !wo.IsDeleted)
             .ToList();
@@ -42,7 +46,8 @@ public partial class GridDataWorkOrders : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByName() {
+    private void OnClickOrderByName()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.Name)
             .ToList();
@@ -50,7 +55,8 @@ public partial class GridDataWorkOrders : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByClient() {
+    private void OnClickOrderByClient()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.ClientName)
             .ToList();
@@ -58,7 +64,8 @@ public partial class GridDataWorkOrders : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByStartDate() {
+    private void OnClickOrderByStartDate()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.StartDate)
             .ToList();
@@ -66,7 +73,8 @@ public partial class GridDataWorkOrders : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByFinishDate() {
+    private void OnClickOrderByFinishDate()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.FinishDate)
             .ToList();
@@ -74,17 +82,20 @@ public partial class GridDataWorkOrders : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickEditWorkOrder(int id) {
+    private void OnClickEditWorkOrder(string Id)
+    {
         _isEditWorkOrderClicked = !_isEditWorkOrderClicked;
         _workOrderId = id;
     }
 
-    public void OnClickDeleteWorkOrder(int id) {
+    public void OnClickDeleteWorkOrder(string Id)
+    {
         _isDeleteWorkOrderClicked = !_isDeleteWorkOrderClicked;
         _workOrderId = id;
     }
 
-    private void OnClickTableRow(int workOrderId) {
+    private void OnClickTableRow(int workOrderId)
+    {
         _trIsClicked = !_trIsClicked;
         _currentWorkOrder = WorkOrders
             .Single(wo => wo.Id == workOrderId);

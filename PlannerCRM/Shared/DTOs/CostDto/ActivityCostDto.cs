@@ -2,7 +2,7 @@ namespace PlannerCRM.Shared.DTOs.CostDto;
 
 public class ActivityCostDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }

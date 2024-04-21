@@ -9,18 +9,19 @@ public partial class OperationManager : ComponentBase
     private List<WorkOrderViewDto> _filteredList;
     private List<ClientViewDto> _clients;
 
-    private Dictionary<string, Action> _filters;    
+    private Dictionary<string, Action> _filters;
     private bool _isCreateWorkOrderClicked;
 
     private bool _isCreateClientClicked;
     private bool _isDeleteClientClicked;
-    
+
     private bool _isCreateActivityClicked;
     private bool _isShowClientsClicked;
 
     private int _collectionSize;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _workOrders = new();
         _filteredList = new();
         _clients = new();
@@ -33,14 +34,17 @@ public partial class OperationManager : ComponentBase
         };
     }
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         _collectionSize = await OperationManagerService.GetWorkOrdersCollectionSizeAsync();
         _workOrders = await OperationManagerService.GetPaginatedWorkOrdersAsync();
         _filteredList = new(_workOrders);
     }
 
-    private void HandleSearchedElements(string query) {
-        if (string.IsNullOrEmpty(query)) {
+    private void HandleSearchedElements(string query)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
             _filteredList = new(_workOrders);
         }
 
@@ -58,13 +62,15 @@ public partial class OperationManager : ComponentBase
         StateHasChanged();
     }
 
-    private void GetAll() {
+    private void GetAll()
+    {
         _filteredList = new(_workOrders);
 
         StateHasChanged();
     }
 
-    private void GetArchived() {
+    private void GetArchived()
+    {
         _filteredList = _workOrders
             .Where(wo => wo.IsArchived)
             .ToList();
@@ -72,15 +78,17 @@ public partial class OperationManager : ComponentBase
         StateHasChanged();
     }
 
-    private void GetActive() {
+    private void GetActive()
+    {
         _filteredList = _workOrders
             .Where(wo => !wo.IsDeleted && !wo.IsCompleted && !wo.IsArchived)
             .ToList();
-        
+
         StateHasChanged();
     }
 
-    private void GetCompleted() {
+    private void GetCompleted()
+    {
         _filteredList = _workOrders
             .Where(wo => wo.IsCompleted)
             .ToList();
@@ -88,7 +96,8 @@ public partial class OperationManager : ComponentBase
         StateHasChanged();
     }
 
-    private void GetDeleted() {
+    private void GetDeleted()
+    {
         _filteredList = _workOrders
             .Where(wo => wo.IsDeleted)
             .ToList();
@@ -96,7 +105,8 @@ public partial class OperationManager : ComponentBase
         StateHasChanged();
     }
 
-    public async Task HandlePaginate(int limit, int offset) {
+    public async Task HandlePaginate(int limit, int offset)
+    {
         _workOrders = await OperationManagerService.GetPaginatedWorkOrdersAsync(limit, offset);
 
         _filteredList = new(_workOrders);
@@ -104,7 +114,8 @@ public partial class OperationManager : ComponentBase
         StateHasChanged();
     }
 
-    public async Task OnClickShowClients() {
+    public async Task OnClickShowClients()
+    {
         _isShowClientsClicked = !_isShowClientsClicked;
         _clients = await OperationManagerService.GetClientsPaginatedAsync();
     }
@@ -118,7 +129,8 @@ public partial class OperationManager : ComponentBase
     private void OnClickAddClient() =>
        _isCreateClientClicked = !_isCreateClientClicked;
 
-    public void OnClickDeleteClient(int id) {
+    public void OnClickDeleteClient(string Id)
+    {
         _isDeleteClientClicked = !_isDeleteClientClicked;
     }
 }

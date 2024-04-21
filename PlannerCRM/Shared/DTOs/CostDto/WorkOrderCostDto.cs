@@ -3,7 +3,7 @@ namespace PlannerCRM.Shared.DTOs.CostDto;
 public class WorkOrderCostDto
 {
     public int WorkOrderId { get; set; }
-    public DateTime StartDate { get; set; } 
+    public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }
     public int TotalHours { get; set; }
     public int TotalEmployees { get; set; }
@@ -16,7 +16,7 @@ public class WorkOrderCostDto
     public List<EmployeeViewDto> Employees { get; set; }
     public List<ActivityCostDto> MonthlyActivityCosts { get; set; }
     public int ClientId { get; set; }
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string FullName { get; set; }
     public string Name { get; set; }
     public bool IsCompleted { get; set; }
