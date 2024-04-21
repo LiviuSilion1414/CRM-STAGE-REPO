@@ -8,8 +8,14 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<IdentityUser>().ToTable(nameof(Employees));
         modelBuilder.Entity<IdentityRole>().ToTable(nameof(EmployeeRoles));
+        modelBuilder.Entity<IdentityUserRole<string>>().ToTable(nameof(EmployeeWithRoles));
+        modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable(nameof(EmployeeRoleClaims));
+        modelBuilder.Entity<IdentityUserClaim<string>>().ToTable(nameof(EmployeeClaims));
+        modelBuilder.Entity<IdentityUserLogin<string>>().ToTable(nameof(EmployeeLogins));
+        modelBuilder.Entity<IdentityUserToken<string>>().ToTable(nameof(EmployeeTokens));
 
         modelBuilder
             .Entity<Employee>()
