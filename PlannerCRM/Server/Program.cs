@@ -7,8 +7,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration
-            .GetConnectionString("Dbstring ")
-                ?? throw new InvalidOperationException("Connection string  not found!"))
+            .GetConnectionString("DbString")
+                ?? throw new InvalidOperationException("Connection string not found!"))
 );
 
 builder.Services.AddHttpClient();
