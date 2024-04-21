@@ -12,11 +12,11 @@ public class EmployeeRepository
     private readonly RoleManager<IdentityRole> _roleManager;
 
     public EmployeeRepository(
-        AppDbContext dbContext, 
+        AppDbContext dbContext,
         DtoValidatorUtillity validator,
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        Logger<DtoValidatorUtillity> logger) 
+        Logger<DtoValidatorUtillity> logger)
     {
         _dbContext = dbContext;
         _validator = validator;
@@ -25,11 +25,14 @@ public class EmployeeRepository
         _logger = logger;
     }
 
-    public async Task AddAsync(EmployeeFormDto dto) {
-        try {
+    public async Task AddAsync(EmployeeFormDto dto)
+    {
+        try
+        {
             var isValid = await _validator.ValidateEmployeeAsync(dto, OperationType.ADD);
-            
-            if (isValid) {
+
+            if (isValid)
+            {
                 await _dbContext.Employees.AddAsync(
                     new Employee
                     {
@@ -60,10 +63,11 @@ public class EmployeeRepository
                     }
                 );
 
-                
-                //await _userManager.AddToRoleAsync(user, dto.Role.ToString() ?? throw new ArgumentNullException(nameof(dto.Role), ExceptionsMessages.NULL_ARG));
-                
-                if (await _dbContext.SaveChangesAsync() == 0) {
+
+                //await _userManager.AddToRoleAsync(user, dto.Role.Tostring () ?? throw new ArgumentNullException(nameof(dto.Role), ExceptionsMessages.NULL_ARG));
+
+                if (await _dbContext.SaveChangesAsync() == 0)
+                {
                     throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
                 }
 
@@ -71,17 +75,22 @@ public class EmployeeRepository
                 await SetRoleAsync(dto.Email, dto.Role ?? throw new ArgumentNullException(nameof(dto.Role), ExceptionsMessages.NULL_ARG));
                 await SetProfilePictureAsync(dto);
                 await SetFKProfilePictureIdAsync(dto.Email);
-            } else {
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_ADD);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
 
             throw;
         }
     }
 
-    private async Task AddUserAsync(EmployeeFormDto dto) {
+    private async Task AddUserAsync(EmployeeFormDto dto)
+    {
         try
         {
             var user = new IdentityUser
@@ -100,12 +109,14 @@ public class EmployeeRepository
         }
     }
 
-    private async Task SetRoleAsync(string email, Roles role) {
-        try 
+    private async Task SetRoleAsync(string email, Roles role)
+    {
+        try
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user is not null) {
-                await _userManager.AddToRoleAsync(user, role.ToString());
+            if (user is not null)
+            {
+                await _userManager.AddToRoleAsync(user, role.Tostring());
             }
         }
         catch (Exception exc)
@@ -134,7 +145,7 @@ public class EmployeeRepository
             );
 
             await _dbContext.SaveChangesAsync();
-        } 
+        }
         catch (Exception exc)
         {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
@@ -149,12 +160,12 @@ public class EmployeeRepository
         {
             var employee = await _dbContext.Employees
                 .SingleAsync(em => em.Email == employeeEmail);
-        
+
             var profilePic = await _dbContext.ProfilePictures
                 .SingleAsync(pic => pic.EmployeeInfo.Email == employeeEmail);
 
             employee.ProfilePictureId = profilePic.Id;
-               
+
             _dbContext.Update(employee);
 
             await _dbContext.SaveChangesAsync();
@@ -167,82 +178,108 @@ public class EmployeeRepository
         }
     }
 
-    public async Task ArchiveAsync(string employeeId) {
-        try {
+    public async Task ArchiveAsync(string employeeId)
+    {
+        try
+        {
             var isValid = await _validator.ValidateDeleteEmployeeAsync(employeeId);
 
-            if (isValid) {
+            if (isValid)
+            {
                 var employee = await _dbContext.Employees
                     .SingleAsync(em => em.Id == employeeId);
 
                 employee.IsArchived = true;
-                
+
                 _dbContext.Update(employee);
 
-                if (await _dbContext.SaveChangesAsync() == 0) {
+                if (await _dbContext.SaveChangesAsync() == 0)
+                {
                     throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
                 }
-            } else {
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_GOING_FORWARD);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
 
             throw;
         }
     }
-    
-    public async Task RestoreAsync(string employeeId) {
-        try {
+
+    public async Task RestoreAsync(string employeeId)
+    {
+        try
+        {
             var isValid = await _validator.ValidateDeleteEmployeeAsync(employeeId);
 
-            if (isValid) {
+            if (isValid)
+            {
                 var employee = await _dbContext.Employees
                     .SingleAsync(em => em.Id == employeeId);
 
                 employee.IsArchived = false;
-                
+
                 _dbContext.Update(employee);
 
-                if (await _dbContext.SaveChangesAsync() == 0) {
+                if (await _dbContext.SaveChangesAsync() == 0)
+                {
                     throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
                 }
-            } else {
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_GOING_FORWARD);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
 
             throw;
         }
     }
 
-    public async Task DeleteAsync(string employeeId) {
-        try {
+    public async Task DeleteAsync(string employeeId)
+    {
+        try
+        {
             var isValid = await _validator.ValidateDeleteEmployeeAsync(employeeId);
 
-            if (isValid) {
+            if (isValid)
+            {
                 var employee = await _dbContext.Employees
                     .SingleAsync(em => em.Id == employeeId);
                 _dbContext.Employees.Remove(employee);
 
                 var user = await _userManager.FindByIdAsync(employeeId);
                 await _userManager.DeleteAsync(user);
-            } else {
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_DELETE);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
 
             throw;
         }
     }
 
-    public async Task EditAsync(EmployeeFormDto dto) {
-        try {
+    public async Task EditAsync(EmployeeFormDto dto)
+    {
+        try
+        {
             var isValid = await _validator.ValidateEmployeeAsync(dto, OperationType.EDIT);
-            
-            if (isValid) {
+
+            if (isValid)
+            {
                 var user = await _userManager.FindByEmailAsync(dto.OldEmail);
                 var model = await _dbContext.Employees.SingleAsync(em => em.Id == dto.Id);
 
@@ -250,34 +287,36 @@ public class EmployeeRepository
                 model.LastName = dto.LastName;
                 model.FullName = $"{dto.FirstName + dto.LastName + string.Empty}";
                 model.Username = dto.Email;
-                model.BirthDay = dto.BirthDay 
+                model.BirthDay = dto.BirthDay
                     ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG);
-                model.StartDate = dto.StartDate 
+                model.StartDate = dto.StartDate
                     ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG);
                 model.Email = dto.Email;
-                model.Role = dto.Role 
+                model.Role = dto.Role
                     ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG);
                 model.NumericCode = dto.NumericCode;
                 model.CurrentHourlyRate = dto.CurrentHourlyRate;
-                
+
                 var isContainedModifiedHourlyRate = await _dbContext.Employees
                     .AnyAsync(em => em.Salaries
                         .Any(s => s.Salary != dto.CurrentHourlyRate));
-                
-                if (!isContainedModifiedHourlyRate) {
+
+                if (!isContainedModifiedHourlyRate)
+                {
                     model.Salaries = dto.EmployeeSalaries
                         .Where(ems => _dbContext.Employees
                             .Any(em => em.Id == ems.EmployeeId))
-                        .Select(ems => 
-                            new EmployeeSalary {
+                        .Select(ems =>
+                            new EmployeeSalary
+                            {
                                 EmployeeId = dto.Id,
                                 StartDate = ems.StartDate,
                                 FinishDate = ems.FinishDate,
                                 Salary = ems.Salary
                             }
                         ).ToList();
-                }    
-                
+                }
+
                 _dbContext.Employees.Update(model);
 
                 user.Email = dto.Email;
@@ -287,13 +326,14 @@ public class EmployeeRepository
                 var passChangeResult = await _userManager.RemovePasswordAsync(user);
                 var updateResult = await _userManager.AddPasswordAsync(user, dto.Password);
 
-                if (!passChangeResult.Succeeded || !updateResult.Succeeded) {
+                if (!passChangeResult.Succeeded || !updateResult.Succeeded)
+                {
                     throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
                 }
 
                 var rolesList = await _userManager.GetRolesAsync(user);
                 var userRole = rolesList
-                    .Single() 
+                    .Single()
                         ?? throw new NullReferenceException(ExceptionsMessages.NULL_PARAM);
 
                 var isInRole = await _userManager.IsInRoleAsync(user, userRole);
@@ -301,32 +341,40 @@ public class EmployeeRepository
                 if (isInRole)
                 {
                     var deleteRoleResult = await _userManager.RemoveFromRoleAsync(user, userRole);
-                    var reassignmentRoleResult = await _userManager.AddToRoleAsync(user, dto.Role.ToString());
+                    var reassignmentRoleResult = await _userManager.AddToRoleAsync(user, dto.Role.Tostring());
 
-                    if (!deleteRoleResult.Succeeded || !reassignmentRoleResult.Succeeded) {
+                    if (!deleteRoleResult.Succeeded || !reassignmentRoleResult.Succeeded)
+                    {
                         throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
                     }
                 }
 
-                if (await _dbContext.SaveChangesAsync() == 0) {
+                if (await _dbContext.SaveChangesAsync() == 0)
+                {
                     throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
                 }
 
                 await SetProfilePictureAsync(dto);
                 await SetFKProfilePictureIdAsync(dto.Email);
-            } else {
+            }
+            else
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_EDIT);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
-            
+
             throw;
         }
     }
 
-    public async Task<EmployeeViewDto> GetForViewByIdAsync(string employeeId) {
+    public async Task<EmployeeViewDto> GetForViewByIdAsync(string employeeId)
+    {
         return await _dbContext.Employees
-            .Select(em => new EmployeeViewDto {
+            .Select(em => new EmployeeViewDto
+            {
                 Id = em.Id,
                 FirstName = em.FirstName,
                 LastName = em.LastName,
@@ -340,12 +388,14 @@ public class EmployeeRepository
                 Email = em.Email,
                 IsDeleted = em.IsDeleted,
                 IsArchived = em.IsArchived,
-                Role = em.Role, 
+                Role = em.Role,
                 CurrentHourlyRate = em.CurrentHourlyRate,
-                ProfilePicture = new ProfilePictureDto {
+                ProfilePicture = new ProfilePictureDto
+                {
                     Id = em.ProfilePictureId,
                     EmployeeId = em.Id,
-                    EmployeeInfo = new EmployeeSelectDto {
+                    EmployeeInfo = new EmployeeSelectDto
+                    {
                         Email = em.Email,
                         FirstName = em.FirstName,
                         LastName = em.LastName,
@@ -361,18 +411,22 @@ public class EmployeeRepository
                         .ImageType
                 },
                 EmployeeSalaries = em.Salaries
-                    .Select(ems => new EmployeeSalaryDto {
+                    .Select(ems => new EmployeeSalaryDto
+                    {
                         Id = ems.Id,
                         EmployeeId = ems.Id,
                         StartDate = ems.StartDate,
                         FinishDate = ems.StartDate,
-                        Salary = ems.Salary})
+                        Salary = ems.Salary
+                    })
                     .ToList(),
                 EmployeeActivities = em.EmployeeActivity
                     .Select(ea =>
-                        new EmployeeActivityDto {
+                        new EmployeeActivityDto
+                        {
                             EmployeeId = ea.EmployeeId,
-                            Employee = new EmployeeSelectDto {
+                            Employee = new EmployeeSelectDto
+                            {
                                 Id = ea.Employee.Id,
                                 Email = ea.Employee.Email,
                                 FirstName = ea.Employee.FirstName,
@@ -381,7 +435,8 @@ public class EmployeeRepository
                                 CurrentHourlyRate = ea.Employee.CurrentHourlyRate,
                             },
                             ActivityId = ea.ActivityId,
-                            Activity = new ActivitySelectDto {
+                            Activity = new ActivitySelectDto
+                            {
                                 Id = ea.Activity.Id,
                                 Name = ea.Activity.Name,
                                 StartDate = ea.Activity.StartDate,
@@ -390,13 +445,15 @@ public class EmployeeRepository
                             }
                         })
                     .ToList()
-                })   
+            })
             .SingleAsync(em => em.Id == employeeId);
     }
 
-    public async Task<EmployeeSelectDto> GetForRestoreAsync(string employeeId) {
+    public async Task<EmployeeSelectDto> GetForRestoreAsync(string employeeId)
+    {
         return await _dbContext.Employees
-            .Select(em => new EmployeeSelectDto {
+            .Select(em => new EmployeeSelectDto
+            {
                 Id = em.Id,
                 Email = em.Email,
                 FirstName = em.FirstName,
@@ -407,10 +464,12 @@ public class EmployeeRepository
             .SingleAsync(em => em.Id == employeeId);
     }
 
-    public async Task<EmployeeFormDto> GetForEditByIdAsync(string employeeId) {
+    public async Task<EmployeeFormDto> GetForEditByIdAsync(string employeeId)
+    {
         return await _dbContext.Employees
             .Where(em => !em.IsDeleted || !em.IsArchived)
-            .Select(em => new EmployeeFormDto {
+            .Select(em => new EmployeeFormDto
+            {
                 Id = em.Id,
                 FirstName = em.FirstName,
                 LastName = em.LastName,
@@ -428,35 +487,41 @@ public class EmployeeRepository
                 EmployeeSalaries = em.Salaries
                     .Where(ems => _dbContext.Employees
                         .Any(em => em.Id == ems.EmployeeId))
-                    .Select(ems => new EmployeeSalaryDto {
+                    .Select(ems => new EmployeeSalaryDto
+                    {
                         Id = ems.Id,
                         EmployeeId = em.Id,
                         StartDate = ems.StartDate,
                         FinishDate = ems.StartDate,
-                        Salary = ems.Salary})
+                        Salary = ems.Salary
+                    })
                     .ToList()
-                })
+            })
             .SingleAsync(em => em.Id == employeeId);
     }
 
-    public async Task<EmployeeDeleteDto> GetForDeleteByIdAsync(string employeeId) {
+    public async Task<EmployeeDeleteDto> GetForDeleteByIdAsync(string employeeId)
+    {
         return await _dbContext.Employees
             .Where(em => (!em.IsDeleted || !em.IsArchived) && em.Id == employeeId)
-            .Select(em => new EmployeeDeleteDto {
+            .Select(em => new EmployeeDeleteDto
+            {
                 Id = em.Id,
                 FullName = $"{em.FirstName} {em.LastName}",
                 Email = em.Email,
                 Role = em.Role
-                    .ToString()
+                    .Tostring()
                     .Replace('_', ' '),
                 EmployeeActivities = _dbContext.EmployeeActivity
                     .Where(ea => ea.EmployeeId == employeeId)
-                    .Select(ea => new EmployeeActivityDto {
+                    .Select(ea => new EmployeeActivityDto
+                    {
                         Id = ea.Id,
                         EmployeeId = ea.EmployeeId,
                         Employee = _dbContext.Employees
                             .Where(e => e.Id == ea.EmployeeId)
-                            .Select(_ => new EmployeeSelectDto {
+                            .Select(_ => new EmployeeSelectDto
+                            {
                                 Id = ea.Employee.Id,
                                 Email = ea.Employee.Email,
                                 FullName = ea.Employee.FullName,
@@ -465,7 +530,8 @@ public class EmployeeRepository
                         ActivityId = ea.ActivityId,
                         Activity = _dbContext.Activities
                             .Where(ac => ac.Id == ea.ActivityId)
-                            .Select(_ => new ActivitySelectDto {
+                            .Select(_ => new ActivitySelectDto
+                            {
                                 Id = ea.Activity.Id,
                                 Name = ea.Activity.Name,
                                 WorkOrderId = ea.Activity.WorkOrderId,
@@ -473,15 +539,17 @@ public class EmployeeRepository
                             .Single()
                     })
                     .ToList()
-                
+
             })
             .SingleAsync(em => em.Id == employeeId);
     }
-    
-    public async Task<List<EmployeeSelectDto>> SearchEmployeeAsync(string email) {
+
+    public async Task<List<EmployeeSelectDto>> SearchEmployeeAsync(string email)
+    {
         return await _dbContext.Employees
             .Where(em => !em.IsDeleted && !em.IsArchived)
-            .Select(em => new EmployeeSelectDto {
+            .Select(em => new EmployeeSelectDto
+            {
                 Id = em.Id,
                 Email = em.Email,
                 FirstName = em.FirstName,
@@ -489,17 +557,19 @@ public class EmployeeRepository
                 FullName = em.FullName,
                 Role = em.Role
             })
-            .Where(em => EF.Functions.ILike(em.FullName, $"%{email}%") || 
+            .Where(em => EF.Functions.ILike(em.FullName, $"%{email}%") ||
                 EF.Functions.ILike(em.Email, $"%{email}%"))
             .ToListAsync();
     }
 
-    public async Task<List<EmployeeViewDto>> GetPaginatedEmployeesAsync(int limit, int offset) {
+    public async Task<List<EmployeeViewDto>> GetPaginatedEmployeesAsync(int limit, int offset)
+    {
         return await _dbContext.Employees
             .OrderBy(em => em.Id)
             .Skip(limit)
             .Take(offset)
-            .Select(em => new EmployeeViewDto {
+            .Select(em => new EmployeeViewDto
+            {
                 Id = em.Id,
                 FirstName = em.FirstName,
                 LastName = em.LastName,
@@ -512,11 +582,13 @@ public class EmployeeRepository
                 IsDeleted = em.IsDeleted,
                 IsArchived = em.IsArchived,
                 EmployeeActivities = em.EmployeeActivity
-                    .Select(ea => new EmployeeActivityDto {
+                    .Select(ea => new EmployeeActivityDto
+                    {
                         Id = ea.ActivityId,
                         EmployeeId = em.Id,
                         Employee = _dbContext.Employees
-                            .Select(em => new EmployeeSelectDto {
+                            .Select(em => new EmployeeSelectDto
+                            {
                                 Id = em.Id,
                                 Email = em.Email,
                                 FirstName = em.FirstName,
@@ -526,37 +598,43 @@ public class EmployeeRepository
                             .Single(em => em.Id == ea.EmployeeId),
                         ActivityId = ea.ActivityId,
                         Activity = _dbContext.Activities
-                            .Select(ac => new ActivitySelectDto {
-                            Id = ac.Id,
-                            Name = ac.Name,
-                            StartDate = ac.StartDate,
-                            FinishDate = ac.FinishDate,
-                            WorkOrderId = ac.WorkOrderId
-                        })
+                            .Select(ac => new ActivitySelectDto
+                            {
+                                Id = ac.Id,
+                                Name = ac.Name,
+                                StartDate = ac.StartDate,
+                                FinishDate = ac.FinishDate,
+                                WorkOrderId = ac.WorkOrderId
+                            })
                         .Single(ac => ac.Id == ea.ActivityId),
                     }).ToList(),
                 EmployeeSalaries = em.Salaries
-                    .Select(ems => new EmployeeSalaryDto {
+                    .Select(ems => new EmployeeSalaryDto
+                    {
                         Id = ems.Id,
                         EmployeeId = ems.Id,
                         StartDate = ems.StartDate,
                         FinishDate = ems.StartDate,
-                        Salary = ems.Salary})
+                        Salary = ems.Salary
+                    })
                     .ToList(),
             })
             .ToListAsync();
     }
 
-    public async Task<CurrentEmployeeDto> GetEmployeeIdAsync(string email) {
+    public async Task<CurrentEmployeeDto> GetEmployeeIdAsync(string email)
+    {
         return await _dbContext.Employees
             .Where(em => !em.IsDeleted && !em.IsArchived)
-            .Select(em => new CurrentEmployeeDto {
+            .Select(em => new CurrentEmployeeDto
+            {
                 Id = em.Id,
-                Email = em.Email})
+                Email = em.Email
+            })
             .FirstAsync(em => em.Email == email);
     }
 
-    public async Task<int> GetEmployeesSizeAsync() => 
+    public async Task<int> GetEmployeesSizeAsync() =>
         await _dbContext.Employees
             .CountAsync();
 }

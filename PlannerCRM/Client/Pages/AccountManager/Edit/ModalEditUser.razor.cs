@@ -18,12 +18,14 @@ public partial class ModalEditUser : ComponentBase
     protected override async Task OnInitializedAsync() =>
         _model = await AccountManagerService.GetEmployeeForEditByIdAsync(Id);
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _model = new();
         _currentPage = NavigationUtil.GetCurrentPage();
-    } 
-    
-    private async Task OnClickModalConfirm(EmployeeFormDto returnedModel) {
+    }
+
+    private async Task OnClickModalConfirm(EmployeeFormDto returnedModel)
+    {
         await AccountManagerService.UpdateEmployeeAsync(returnedModel);
 
         NavManager.NavigateTo(_currentPage, true);

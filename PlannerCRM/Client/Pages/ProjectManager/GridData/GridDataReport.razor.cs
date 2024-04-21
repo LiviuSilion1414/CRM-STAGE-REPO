@@ -5,7 +5,7 @@ namespace PlannerCRM.Client.Pages.ProjectManager.GridData;
 [Authorize(Roles = nameof(Roles.PROJECT_MANAGER))]
 public partial class GridDataReport : ComponentBase
 {
-    [Parameter] public List<WorkOrderViewDto> WorkOrders { get; set;}
+    [Parameter] public List<WorkOrderViewDto> WorkOrders { get; set; }
 
     [Inject] public ProjectManagerService ProjectManagerService { get; set; }
     [Inject] public NavigationManager NavManager { get; set; }
@@ -13,7 +13,7 @@ public partial class GridDataReport : ComponentBase
 
     private Dictionary<string, Action> _orderTitles;
 
-    private int _workOrderId;
+    private string _workOrderId;
     private bool _isViewInvoiceClicked;
     private bool _isError;
     private string _message;
@@ -21,7 +21,8 @@ public partial class GridDataReport : ComponentBase
     private string _orderKey;
     private bool _isViewReportInvoiceClicked;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         WorkOrders = new();
         _currentPage = NavigationUtil.GetCurrentPage();
         _orderTitles = new() {
@@ -33,7 +34,8 @@ public partial class GridDataReport : ComponentBase
         };
     }
 
-    private void OnClickOrderByStatus() {
+    private void OnClickOrderByStatus()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.IsInvoiceCreated)
             .ToList();
@@ -41,7 +43,8 @@ public partial class GridDataReport : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByFinishDate() {
+    private void OnClickOrderByFinishDate()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.FinishDate)
             .ToList();
@@ -49,7 +52,8 @@ public partial class GridDataReport : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByStartDate() {
+    private void OnClickOrderByStartDate()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.StartDate)
             .ToList();
@@ -57,7 +61,8 @@ public partial class GridDataReport : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByWorkOrder() {
+    private void OnClickOrderByWorkOrder()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.Name)
             .ToList();
@@ -65,7 +70,8 @@ public partial class GridDataReport : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByClient() {
+    private void OnClickOrderByClient()
+    {
         WorkOrders = WorkOrders
             .OrderBy(wo => wo.ClientName)
             .ToList();
@@ -73,32 +79,39 @@ public partial class GridDataReport : ComponentBase
         StateHasChanged();
     }
 
-    private void HandleOrdering(string key) {
-        if (_orderTitles.ContainsKey(key)) {
+    private void HandleOrdering(string key)
+    {
+        if (_orderTitles.ContainsKey(key))
+        {
             _orderTitles[key].Invoke();
             _orderKey = key;
         }
     }
 
-    private async Task CreateReport(int workOrderId) {
+    private async Task CreateReport(string workOrderId)
+    {
         var response = await ProjectManagerService.AddInvoiceAsync(workOrderId);
         _isError = !response.IsSuccessStatusCode;
 
-        if(!_isError) {
+        if (!_isError)
+        {
             NavManager.NavigateTo(_currentPage, true);
-        } else {
+        }
+        else
+        {
             _isError = true;
-            _message = await response.Content.ReadAsStringAsync();
+            _message = await response.Content.ReadAsstring Async();
         }
     }
 
-    private void ViewReport(int workOrderId) {
+    private void ViewReport(string workOrderId)
+    {
         _isViewInvoiceClicked = !_isViewInvoiceClicked;
         _workOrderId = workOrderId;
         _isViewReportInvoiceClicked = !_isViewReportInvoiceClicked;
         NavManager.NavigateTo($"/invoices/{_workOrderId}");
     }
-    
+
     private void HandleFeedbackCancel(bool value) =>
         _isError = value;
 }

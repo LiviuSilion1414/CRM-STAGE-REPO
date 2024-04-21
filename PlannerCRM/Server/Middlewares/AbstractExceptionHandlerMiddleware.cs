@@ -12,18 +12,18 @@ public abstract class AbstractExceptionHandlerMiddleware : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        try 
+        try
         {
             await next(context);
-        } 
-        catch (Exception exc) 
+        }
+        catch (Exception exc)
         {
             var response = context.Response;
             response.ContentType = "application/json";
             Logger.Error(context.Request.Method, $"Error during executing {context}", context.Request.Path.Value);
-            
+
             var (status, message) = GetResponse(exc);
-            response.StatusCode = (int) status;
+            response.StatusCode = (int)status;
             await response.WriteAsync(message);
         }
     }

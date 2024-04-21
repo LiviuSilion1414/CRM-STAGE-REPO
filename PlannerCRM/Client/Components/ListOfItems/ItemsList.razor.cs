@@ -8,7 +8,8 @@ public partial class ItemsList<T> : ComponentBase
     [Parameter] public List<string> PropertyKeys { get; set; }
     [Parameter] public EventCallback<T> GetSelectedItem { get; set; }
 
-    private object GetPropertyName(T item) {
+    private object GetPropertyName(T item)
+    {
         var hasMatchingKeys = item
             .GetType()
             .GetProperties()
@@ -16,7 +17,8 @@ public partial class ItemsList<T> : ComponentBase
                 .Any(key => key == prop.Name)
             );
 
-        if (hasMatchingKeys) {
+        if (hasMatchingKeys)
+        {
             return item
                 .GetType()
                 .GetProperty(PropertyKeys.First())
@@ -26,9 +28,11 @@ public partial class ItemsList<T> : ComponentBase
         return "name";
     }
 
-    private async Task SetAsSelected(T optionItem) {
-        if (optionItem is not null) {
+    private async Task SetAsSelected(T optionItem)
+    {
+        if (optionItem is not null)
+        {
             await GetSelectedItem.InvokeAsync(optionItem);
         }
-    } 
+    }
 }

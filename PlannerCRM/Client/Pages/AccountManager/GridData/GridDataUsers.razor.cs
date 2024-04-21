@@ -3,9 +3,9 @@ namespace PlannerCRM.Client.Pages.AccountManager.GridData;
 [Authorize(Roles = nameof(Roles.ACCOUNT_MANAGER))]
 public partial class GridDataUsers : ComponentBase
 {
-    [Parameter] public List<EmployeeViewDto> Users { get; set;  }
+    [Parameter] public List<EmployeeViewDto> Users { get; set; }
     private Dictionary<string, Action> _orderTitles;
-    
+
     private string _userId;
     private string _orderKey;
 
@@ -14,7 +14,8 @@ public partial class GridDataUsers : ComponentBase
     private bool _isDeleteClicked;
     private bool _isRestoreClicked;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _orderTitles = new() {
             { " Stato ", OnClickOrderIfActive },
             { " Email ", OnClickOrderByEmail },
@@ -26,34 +27,41 @@ public partial class GridDataUsers : ComponentBase
         };
     }
 
-    private void HandleOrdering(string key) {
-        if (_orderTitles.ContainsKey(key)) {
+    private void HandleOrdering(string key)
+    {
+        if (_orderTitles.ContainsKey(key))
+        {
             _orderTitles[key].Invoke();
             _orderKey = key;
         }
     }
 
-    private void ShowDetails(string id) {
+    private void ShowDetails(string id)
+    {
         _isViewClicked = !_isViewClicked;
         _userId = id;
     }
 
-    private void OnClickEdit(string id) {
+    private void OnClickEdit(string id)
+    {
         _isEditClicked = !_isEditClicked;
         _userId = id;
     }
 
-    private void OnClickDelete(string id) {
+    private void OnClickDelete(string id)
+    {
         _isDeleteClicked = !_isDeleteClicked;
         _userId = id;
     }
 
-    private void OnClickRestore(string id) {
+    private void OnClickRestore(string id)
+    {
         _isRestoreClicked = !_isRestoreClicked;
         _userId = id;
     }
 
-    private void OnClickOrderIfActive() {
+    private void OnClickOrderIfActive()
+    {
         Users = Users
             .OrderBy(us => !us.IsArchived)
             .ToList();
@@ -61,15 +69,17 @@ public partial class GridDataUsers : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByEmail() {
+    private void OnClickOrderByEmail()
+    {
         Users = Users
             .OrderBy(us => us.Email)
             .ToList();
 
         StateHasChanged();
     }
-    
-    private void OnClickOrderByName() {
+
+    private void OnClickOrderByName()
+    {
         Users = Users
             .OrderBy(us => us.FullName)
             .ToList();
@@ -77,7 +87,8 @@ public partial class GridDataUsers : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByBirthDay() {
+    private void OnClickOrderByBirthDay()
+    {
         Users = Users
             .OrderBy(us => us.BirthDay)
             .ToList();
@@ -85,7 +96,8 @@ public partial class GridDataUsers : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByRole() {
+    private void OnClickOrderByRole()
+    {
         Users = Users
             .OrderBy(us => us.Role)
             .ToList();
@@ -93,7 +105,8 @@ public partial class GridDataUsers : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByHourlyRate() {
+    private void OnClickOrderByHourlyRate()
+    {
         Users = Users
             .OrderBy(us => us.CurrentHourlyRate)
             .ToList();
@@ -101,7 +114,8 @@ public partial class GridDataUsers : ComponentBase
         StateHasChanged();
     }
 
-    private void OnClickOrderByStartDate() {
+    private void OnClickOrderByStartDate()
+    {
         Users = Users
             .OrderBy(us => us.StartDate)
             .ToList();

@@ -53,9 +53,9 @@ public partial class OperationManager : ComponentBase
                 {
                     return
                         wo.Name
-                            .Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                            .Contains(query, string Comparison.OrdinalIgnoreCase) ||
                         wo.ClientName
-                            .Contains(query, StringComparison.OrdinalIgnoreCase);
+                            .Contains(query, string Comparison.OrdinalIgnoreCase);
                 })
             .ToList();
 

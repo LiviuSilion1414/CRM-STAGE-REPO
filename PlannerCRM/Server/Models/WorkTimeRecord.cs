@@ -7,8 +7,9 @@ public class WorkTimeRecord
     public int Hours { get; set; }
     public decimal TotalPrice { get; set; }
 
-    public int ActivityId { get; set; }
-    public int WorkOrderId { get; set; }
+    public string ActivityId { get; set; }
+    public string WorkOrderId
+    { get; set; }
 
     public string EmployeeId { get; set; }
     public Employee Employee { get; set; }

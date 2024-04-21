@@ -2,10 +2,11 @@ namespace PlannerCRM.Shared.Attributes;
 
 public partial class StrongPasswordValidatorAttribute : ValidationAttribute
 {
-    private int _minimum;
-    private int _maximum;
+    private string _minimum;
+    private string _maximum;
 
-    public StrongPasswordValidatorAttribute(int minimum, int maximum) {
+    public StrongPasswordValidatorAttribute(string minimum, string maximum)
+    {
         _minimum = minimum;
         _maximum = maximum;
     }
@@ -13,17 +14,19 @@ public partial class StrongPasswordValidatorAttribute : ValidationAttribute
     public StrongPasswordValidatorAttribute()
     { }
 
-    public override bool IsValid(object value) {
+    public override bool IsValid(object value)
+    {
         if (value is null) return false;
 
-        if (value.GetType() == typeof(string)) {
-            var stringContent = value as string;
-            var stringLength = stringContent.Length;
+        if (value.GetType() == typeof(string))
+        {
+            var string Content = value as string;
+            var string Length = string Content.Length;
 
-            return stringLength >= _minimum && stringLength <= _maximum && EmailRegex().IsMatch(stringContent);
+            return string Length >= _minimum && string Length <= _maximum && EmailRegex().IsMatch(string Content);
         }
-            
-        return false;        
+
+        return false;
     }
 
     [GeneratedRegex("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")]

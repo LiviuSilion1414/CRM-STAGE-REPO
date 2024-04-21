@@ -14,7 +14,7 @@ public class Titles
 
     public const string CONFIRM_ACTION = "Vuoi davvero proseguire?";
 
-        
+
     public const string ADD_WORKORDER = "Aggiungi commessa.";
     public const string EDIT_WORKORDER = "Modifica commessa.";
     public const string DELETE_WORKORDER = "Elimina commessa.";
@@ -26,7 +26,7 @@ public class Titles
     public const string DETAILS_ACTIVITY = "Informazioni attività.";
 
     public const string ADD_HOURS = "Aggiungi orario di lavoro.";
-    
+
     public const string ADD_CLIENT = "Aggiungi cliente.";
     public const string EDIT_CLIENT = "Modifica cliente.";
     public const string DELETE_CLIENT = "Elimina cliente.";

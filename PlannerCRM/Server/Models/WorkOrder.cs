@@ -11,7 +11,7 @@ public class WorkOrder
     public bool IsDeleted { get; set; }
     public List<Activity> Activities { get; set; }
     public List<WorkTimeRecord> WorkTimeRecords { get; set; }
-    public int ClientId { get; set; }
+    public string ClientId { get; set; }
     public FirmClient Client { get; set; }
 }
 

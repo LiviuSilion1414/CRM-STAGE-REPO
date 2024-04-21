@@ -5,7 +5,8 @@ public class CalculatorService
     private readonly AppDbContext _dbContext;
     private readonly ILogger<CalculatorService> _logger;
 
-    public CalculatorService(AppDbContext dbContext, ILogger<CalculatorService> logger) {
+    public CalculatorService(AppDbContext dbContext, ILogger<CalculatorService> logger)
+    {
         _dbContext = dbContext;
         _logger = logger;
     }
@@ -14,25 +15,29 @@ public class CalculatorService
         => await _dbContext.WorkOrderCosts
             .CountAsync();
 
-    public async Task AddInvoiceAsync(int workOrderId) {
-        try {
+    public async Task AddInvoiceAsync(string workOrderId)
+    {
+        try
+        {
             var isAnyWorkOrder = await _dbContext.WorkOrders
                 .AnyAsync(wo => wo.Id == workOrderId);
-    
+
             var isAnyInvoice = await _dbContext.WorkOrderCosts
                 .AnyAsync(inv => inv.WorkOrderId == workOrderId);
-    
-            if (!isAnyWorkOrder) {
+
+            if (!isAnyWorkOrder)
+            {
                 throw new KeyNotFoundException(ExceptionsMessages.WORKORDER_NOT_FOUND);
             }
 
-            if (isAnyInvoice) {
+            if (isAnyInvoice)
+            {
                 throw new DuplicateElementException(ExceptionsMessages.DUPLICATE_OBJECT);
             }
 
             var workOrder = await _dbContext.WorkOrders
                 .SingleAsync(wo => wo.Id == workOrderId);
-            
+
             workOrder.IsCompleted = true;
 
             _dbContext.Update(workOrder);
@@ -40,24 +45,29 @@ public class CalculatorService
             var workOrderCost = await ExecuteCalculationsAsync(workOrder, true);
 
             await _dbContext.WorkOrderCosts.AddAsync(workOrderCost);
-    
-            if (await _dbContext.SaveChangesAsync() == 0) {
+
+            if (await _dbContext.SaveChangesAsync() == 0)
+            {
                 throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
             }
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
-    
+
             throw;
-        } 
+        }
     }
 
-    public async Task<List<WorkOrderViewDto>> GetPaginatedWorkOrdersCostsAsync(int limit, int offset) {
+    public async Task<List<WorkOrderViewDto>> GetPaginatedWorkOrdersCostsAsync(int limit, int offset)
+    {
         return await _dbContext.WorkOrders
             .OrderBy(wo => wo.Id)
             .Skip(limit)
             .Take(offset)
-            .Select(wo => 
-                new WorkOrderViewDto {
+            .Select(wo =>
+                new WorkOrderViewDto
+                {
                     Id = wo.Id,
                     Name = wo.Name,
                     StartDate = wo.StartDate,
@@ -74,9 +84,12 @@ public class CalculatorService
             .ToListAsync();
     }
 
-    public async Task<WorkOrderCostDto> GetWorkOrderCostForViewByIdAsync(int workOrderId) {
-        try {
-            if (workOrderId == 0) {
+    public async Task<WorkOrderCostDto> GetWorkOrderCostForViewByIdAsync(string workOrderId)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(workOrderId))
+            {
                 throw new KeyNotFoundException(ExceptionsMessages.WORKORDER_NOT_FOUND);
             }
 
@@ -86,7 +99,8 @@ public class CalculatorService
 
             var employees = workOrderCost.Employees
                     .Select(em =>
-                        new EmployeeViewDto {
+                        new EmployeeViewDto
+                        {
                             Id = em.Id,
                             FirstName = em.FirstName,
                             LastName = em.LastName,
@@ -108,7 +122,8 @@ public class CalculatorService
 
             var activities = workOrderCost.Activities
                     .Select(ac =>
-                        new ActivityViewDto {
+                        new ActivityViewDto
+                        {
                             Id = ac.Id,
                             Name = ac.Name,
                             StartDate = ac.StartDate,
@@ -121,7 +136,8 @@ public class CalculatorService
 
             var monthlyActivityCosts = workOrderCost.MonthlyActivityCosts
                     .Select(ac =>
-                        new ActivityCostDto {
+                        new ActivityCostDto
+                        {
                             Id = ac.Id,
                             Name = ac.Name,
                             StartDate = ac.StartDate,
@@ -132,7 +148,8 @@ public class CalculatorService
                     )
                     .ToList();
 
-            return new WorkOrderCostDto {
+            return new WorkOrderCostDto
+            {
                 Id = workOrderCost.Id,
                 WorkOrderId = workOrderCost.WorkOrderId,
                 Name = workOrderCost.Name,
@@ -150,29 +167,36 @@ public class CalculatorService
                 TotalCost = workOrderCost.TotalCost,
                 CostPerMonth = workOrderCost.CostPerMonth
             };
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
 
             throw;
         }
     }
 
-    private async Task SetInvoiceCreatedFlagAsync(WorkOrder workOrder) {
+    private async Task SetInvoiceCreatedFlagAsync(WorkOrder workOrder)
+    {
         workOrder.IsInvoiceCreated = true;
 
         _dbContext.Update(workOrder);
 
-        if (await _dbContext.SaveChangesAsync() == 0) {
+        if (await _dbContext.SaveChangesAsync() == 0)
+        {
             throw new DbUpdateException(ExceptionsMessages.IMPOSSIBLE_SAVE_CHANGES);
         }
     }
 
-    private async Task<WorkOrderCost> ExecuteCalculationsAsync(WorkOrder workOrder, bool onCreate = false) {
-        try {
-            if (onCreate) {
+    private async Task<WorkOrderCost> ExecuteCalculationsAsync(WorkOrder workOrder, bool onCreate = false)
+    {
+        try
+        {
+            if (onCreate)
+            {
                 await SetInvoiceCreatedFlagAsync(workOrder);
             }
-            
+
             var employees = await GetAllRelatedEmployeesAsync(workOrder.Id);
             var activities = await GetAllRelatedActivitiesAsync(workOrder.Id);
             var monthlyActivityCosts = await CalculateMonthlyCostAsync(workOrder.Id);
@@ -184,11 +208,12 @@ public class CalculatorService
             var monthlyCost = (await CalculateMonthlyCostAsync(workOrder.Id))
                 .Sum(cost => cost.MonthlyCost);
             var activitiesSize = await GetRelatedActivitiesSizeAsync(workOrder.Id);
-            var costPerMonth = activitiesSize == 0 
+            var costPerMonth = activitiesSize == 0
                 ? 0
                 : monthlyCost / activitiesSize;
 
-            return new WorkOrderCost {
+            return new WorkOrderCost
+            {
                 WorkOrderId = workOrder.Id,
                 Name = workOrder.Name,
                 StartDate = workOrder.StartDate,
@@ -206,46 +231,54 @@ public class CalculatorService
                 TotalCost = totalCost,
                 CostPerMonth = costPerMonth
             };
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             _logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
 
             throw;
         }
     }
 
-    private async Task<int> CalculateTotalHoursAsync(int workOrderId) {
+    private async Task<int> CalculateTotalHoursAsync(string workOrderId)
+    {
         return await _dbContext.WorkTimeRecords
             .Where(wtr => wtr.WorkOrderId == workOrderId)
             .SumAsync(x => x.Hours);
     }
 
-    private async Task<int> GetRelatedEmployeesSizeAsync(int workOrderId) {
+    private async Task<int> GetRelatedEmployeesSizeAsync(string workOrderId)
+    {
         return await _dbContext.Employees
             .Where(em => _dbContext.WorkTimeRecords
                 .Any(wtr => wtr.EmployeeId == em.Id && wtr.WorkOrderId == workOrderId))
             .CountAsync();
     }
 
-    private async Task<int> GetRelatedActivitiesSizeAsync(int workOrderId) {
+    private async Task<int> GetRelatedActivitiesSizeAsync(string workOrderId)
+    {
         return await _dbContext.Activities
             .Where(ac => ac.WorkOrderId == workOrderId)
             .CountAsync();
     }
 
-    private async Task<List<Employee>> GetAllRelatedEmployeesAsync(int workOrderId) {
+    private async Task<List<Employee>> GetAllRelatedEmployeesAsync(string workOrderId)
+    {
         return await _dbContext.Employees
             .Where(em => _dbContext.EmployeeActivity
                 .Any(ea => em.Id == ea.EmployeeId))
             .ToListAsync();
     }
 
-    private async Task<List<Activity>> GetAllRelatedActivitiesAsync(int workOrderId) {
+    private async Task<List<Activity>> GetAllRelatedActivitiesAsync(string workOrderId)
+    {
         return await _dbContext.Activities
             .Where(ac => ac.WorkOrderId == workOrderId)
             .ToListAsync();
     }
 
-    private async Task<List<ActivityCost>> CalculateMonthlyCostAsync(int workOrderId) {
+    private async Task<List<ActivityCost>> CalculateMonthlyCostAsync(string workOrderId)
+    {
         var workTimeRecords = await _dbContext.WorkTimeRecords
             .Where(wtr => wtr.WorkOrderId == workOrderId)
             .ToListAsync();
@@ -259,8 +292,9 @@ public class CalculatorService
                 .Any(sal => sal.EmployeeId == em.Id) &&
                 _dbContext.WorkTimeRecords
                     .Any(wtr => wtr.EmployeeId == em.Id))
-            .Select(em => 
-                new EmployeeSalary {
+            .Select(em =>
+                new EmployeeSalary
+                {
                     EmployeeId = em.Id,
                     StartDate = em.Salaries
                         .Single(sal => sal.EmployeeId == em.Id)
@@ -279,7 +313,8 @@ public class CalculatorService
             .Where(wtr => salaries
                 .Any(sal => sal.EmployeeId == wtr.EmployeeId))
             .Select(activityCost =>
-                new ActivityCost {
+                new ActivityCost
+                {
                     Id = activityCost.Id,
                     Name = activities
                         .First(ac => ac.WorkOrderId == activityCost.WorkOrderId)

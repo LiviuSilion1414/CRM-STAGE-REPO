@@ -24,7 +24,7 @@
                         <ItemsList
                             T ="@WorkOrderSelectDto"
                             Items="@_workOrders"
-                            PropertyKeys="@(new List<string>(){"Name"})"
+                            PropertyKeys="@(new List<string >(){"Name"})"
                             GetSelectedItem="@HandleChosenWorkOrder"/>
                         <CustomValidationMessage FieldName="@nameof(Model.WorkOrderId)"/>
                     </div>
@@ -55,7 +55,7 @@
                         <ItemsList
                             T ="@EmployeeSelectDto"
                             Items="@_employees"
-                            PropertyKeys="@(new List<string>(){"FullName"})"
+                            PropertyKeys="@(new List<string >(){"FullName"})"
                             GetSelectedItem="@HandleChosenEmployee"/>
                     </div>
                     <div class="container">
@@ -73,7 +73,7 @@
                                         @if (Model.ViewEmployeeActivity.Any()) {
                                             @foreach (var ea in Model.ViewEmployeeActivity) {
                                                 <tr>
-                                                    <td>@(ea.Employee.Role.ToString().Replace('_', ' '))</td>
+                                                    <td>@(ea.Employee.Role.Tostring ().Replace('_', ' '))</td>
                                                     <td>@ea.Employee.FullName</td>
                                                     <td> 
                                                         <i class="bi bi-envelope-at"></i>

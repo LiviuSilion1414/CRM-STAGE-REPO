@@ -7,8 +7,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration
-            .GetConnectionString("DbString")
-                ?? throw new InvalidOperationException("Connection string not found!"))
+            .GetConnectionString("Dbstring ")
+                ?? throw new InvalidOperationException("Connection string  not found!"))
 );
 
 builder.Services.AddHttpClient();
@@ -73,7 +73,8 @@ using (var scope = app.Services.CreateScope())
         var accountManagerEmail = "account.manager@gmail.com";
         var accountManagerPassword = "Qwerty123";
 
-        var accountManager = new Employee {
+        var accountManager = new Employee
+        {
             Email = accountManagerEmail,
             EmailConfirmed = true,
             UserName = accountManagerEmail,

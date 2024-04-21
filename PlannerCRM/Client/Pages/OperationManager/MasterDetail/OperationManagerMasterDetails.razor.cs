@@ -3,7 +3,7 @@ namespace PlannerCRM.Client.Pages.OperationManager.MasterDetail;
 [Authorize(Roles = nameof(Roles.OPERATION_MANAGER))]
 public partial class OperationManagerMasterDetails : ComponentBase
 {
-    [Parameter] public int WorkOrderId { get; set; }
+    [Parameter] public string WorkOrderId { get; set; }
     [Parameter] public WorkOrderViewDto WorkOrder { get; set; }
 
     [Inject] public OperationManagerCrudService OperationManagerService { get; set; }
@@ -14,27 +14,32 @@ public partial class OperationManagerMasterDetails : ComponentBase
     private bool _isEditActivityClicked;
     private bool _isDeleteActivityClicked;
     private bool _isShowActivityClicked;
-    private int _activityId;
+    private string _activityId;
     private ActivityViewDto _activityView;
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         _workOrder = await OperationManagerService.GetWorkOrderForViewByIdAsync(WorkOrderId);
-        _activities = await OperationManagerService.GetActivityByWorkOrderAsync(_workOrder.Id); 
+        _activities = await OperationManagerService.GetActivityByWorkOrderAsync(_workOrder.Id);
     }
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _workOrder = new();
         _activities = new();
     }
 
-    private void OnClickEdit(int activityId) {
+    private void OnClickEdit(string activityId)
+    {
         _isEditActivityClicked = !_isEditActivityClicked;
         _activityId = activityId;
     }
 
-    private void OnClickShowDetails(ActivityViewDto activity) {
+    private void OnClickShowDetails(ActivityViewDto activity)
+    {
         _isShowActivityClicked = !_isShowActivityClicked;
-        _activityView = new() {
+        _activityView = new()
+        {
             Id = activity.Id,
             Name = activity.Name,
             StartDate = activity.StartDate,
@@ -44,7 +49,8 @@ public partial class OperationManagerMasterDetails : ComponentBase
         };
     }
 
-    private void OnClickDelete(int activityId) {
+    private void OnClickDelete(string activityId)
+    {
         _isDeleteActivityClicked = !_isDeleteActivityClicked;
         _activityId = activityId;
     }

@@ -25,7 +25,8 @@ public partial class ModalFormUser : ComponentBase
     private bool _isCancelClicked;
     private string _input;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         Model = new()
         {
             ProfilePicture = new()
@@ -45,33 +46,40 @@ public partial class ModalFormUser : ComponentBase
 
     private void SwitchPassword(string type) => _input = type;
 
-    private void OnClickModalCancel() {
+    private void OnClickModalCancel()
+    {
         _isCancelClicked = !_isCancelClicked;
         NavManager.NavigateTo(_currentPage);
     }
 
-    private void OnClickHideBanner(bool hidden) => 
+    private void OnClickHideBanner(bool hidden) =>
         _isError = hidden;
 
-    private void OnClickInvalidSubmit() {
+    private void OnClickInvalidSubmit()
+    {
         _isError = true;
         _errorMessage = ExceptionsMessages.EMPTY_FIELDS;
     }
 
-    private async Task SaveImage(InputFileChangeEventArgs args) {
-        var (thumbnail, imageType)= await Converter.ConvertImageAsync(args);
+    private async Task SaveImage(InputFileChangeEventArgs args)
+    {
+        var (thumbnail, imageType) = await Converter.ConvertImageAsync(args);
 
         Model.ProfilePicture.Thumbnail = thumbnail;
         Model.ProfilePicture.ImageType = imageType;
     }
 
-    private async Task OnClickModalConfirm() {
-        try {
+    private async Task OnClickModalConfirm()
+    {
+        try
+        {
             var isValid = ValidatorService.Validate(Model, out _errors);
-            
-            if (isValid) {
-                
-                if (OperationType == OperationType.ADD) {
+
+            if (isValid)
+            {
+
+                if (OperationType == OperationType.ADD)
+                {
                     Model.Id = string.Empty;
                     Model.OldEmail = string.Empty;
                 }
@@ -85,26 +93,32 @@ public partial class ModalFormUser : ComponentBase
 
                 Model.EmployeeSalaries = new() {
                     new() {
-                        Id = string.Empty,
-                        EmployeeId = string.Empty,
+                        Id = string .Empty,
+                        EmployeeId = string .Empty,
                         Salary = Model.CurrentHourlyRate,
                         StartDate = Model.StartDateHourlyRate
-                            ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG), 
+                            ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG),
                         FinishDate = Model.FinishDateHourlyRate
-                            ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG) 
+                            ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG)
                     }
                 };
 
                 await GetValidatedModel.InvokeAsync(Model);
-            } else {
+            }
+            else
+            {
                 CustomValidator.DisplayErrors(_errors);
                 OnClickInvalidSubmit();
             }
-        } catch (NullReferenceException exc) {
+        }
+        catch (NullReferenceException exc)
+        {
             Logger.LogError("Error: { } Message: { }", exc.StackTrace, exc.Message);
             _errorMessage = exc.Message;
             _isError = true;
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             Logger.LogError("Error: { } _message: { }", exc.StackTrace, exc.Message);
             _errorMessage = exc.Message;
             _isError = true;

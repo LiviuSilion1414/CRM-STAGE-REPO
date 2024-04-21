@@ -19,9 +19,10 @@ public partial class ModalActivityDetails : ComponentBase
 
     protected override void OnInitialized() => _currentPage = NavigationUtil.GetCurrentPage();
 
-    private void OnClickModalCancel() {
+    private void OnClickModalCancel()
+    {
         _isCancelClicked = !_isCancelClicked;
-        NavManager.NavigateTo(_currentPage);        
+        NavManager.NavigateTo(_currentPage);
     }
 
 }

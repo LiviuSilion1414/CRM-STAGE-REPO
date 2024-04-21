@@ -47,7 +47,7 @@ public partial class ModalDeleteWorkOrder : ComponentBase
 
             if (!responseDelete.IsSuccessStatusCode)
             {
-                _message = await responseDelete.Content.ReadAsStringAsync();
+                _message = await responseDelete.Content.ReadAsstring Async();
                 _isError = true;
             }
             else

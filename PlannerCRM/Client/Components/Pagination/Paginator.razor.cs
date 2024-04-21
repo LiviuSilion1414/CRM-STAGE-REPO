@@ -1,6 +1,6 @@
 namespace PlannerCRM.Client.Components.Pagination;
 
-public partial class Paginator : ComponentBase 
+public partial class Paginator : ComponentBase
 {
     [Parameter] public int CollectionSize { get; set; }
     [Parameter] public int Offset { get; set; } = 5;
@@ -10,8 +10,9 @@ public partial class Paginator : ComponentBase
     private int _elementsToSkip;
     private int _pageNumber;
     private int _totalPages;
-    
-    protected override void OnInitialized() {
+
+    protected override void OnInitialized()
+    {
         _elementsToSkip = 0;
         _pageNumber = 1;
         _pages = new();
@@ -24,24 +25,29 @@ public partial class Paginator : ComponentBase
             .ForEach(pageNumber => _pages.Add(new PagingLink(pageNumber, false)));
     }
 
-    private static int CalculateTotalPages(int collectionSize, int offset) {
-        if (collectionSize < offset) {
+    private static int CalculateTotalPages(int collectionSize, int offset)
+    {
+        if (collectionSize < offset)
+        {
             return 1;
         }
-        
+
         return (collectionSize > offset && (collectionSize % offset > 0))
             ? (collectionSize / offset) + 1
             : collectionSize / offset;
     }
 
-    private string SetClass(int pageNumber) {
+    private string SetClass(int pageNumber)
+    {
         return pageNumber == _pageNumber
             ? CssClass.Active
             : CssClass.Empty;
     }
 
-    private async Task Previous() {
-        if (_elementsToSkip >= Offset) {
+    private async Task Previous()
+    {
+        if (_elementsToSkip >= Offset)
+        {
             _elementsToSkip -= Offset;
             _pageNumber--;
 
@@ -50,16 +56,18 @@ public partial class Paginator : ComponentBase
 
     }
 
-    private async Task Next() {
-        if (_elementsToSkip < CollectionSize && ((_elementsToSkip + Offset) <= CollectionSize)) {
+    private async Task Next()
+    {
+        if (_elementsToSkip < CollectionSize && ((_elementsToSkip + Offset) <= CollectionSize))
+        {
             _elementsToSkip += Offset;
-            _pageNumber++; 
-            
+            _pageNumber++;
+
             await InvokeCallbackAsync(Paginate, _elementsToSkip, Offset);
         }
     }
 
-    private static async Task InvokeCallbackAsync(EventCallback<(int, int)> callback, int skip, int take) 
+    private static async Task InvokeCallbackAsync(EventCallback<(int, int)> callback, int skip, int take)
         => await callback.InvokeAsync((skip, take));
 }
 
@@ -68,7 +76,8 @@ internal class PagingLink
     internal int PageNumber { get; set; }
     internal bool Active { get; set; }
 
-    internal PagingLink(int pageNumber, bool active) {
+    internal PagingLink(int pageNumber, bool active)
+    {
         PageNumber = pageNumber;
         Active = active;
     }

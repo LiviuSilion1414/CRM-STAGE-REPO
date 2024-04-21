@@ -6,7 +6,8 @@ public class GlobalExceptionHandlerMiddleware : AbstractExceptionHandlerMiddlewa
 {
     public override (HttpStatusCode code, string message) GetResponse(Exception exception)
     {
-        var code = exception switch {
+        var code = exception switch
+        {
             KeyNotFoundException => HttpStatusCode.NotFound,
             DuplicateElementException => HttpStatusCode.Conflict,
             UnauthorizedAccessException => HttpStatusCode.Unauthorized,

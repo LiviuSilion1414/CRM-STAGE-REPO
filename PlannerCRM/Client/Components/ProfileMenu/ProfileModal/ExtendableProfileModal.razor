@@ -1,7 +1,7 @@
 <div class="profile-menu text-center" @onclick=@SwitchMenu>
     <span class="clickable">
         <span>Ciao, @_currentUser.FullName!</span>
-        <img src="@(string.IsNullOrEmpty(_currentUser.ProfilePicture.Thumbnail) ? PicResourcePath.PERSON_PIC_PATH : _currentUser.ProfilePicture.Thumbnail)" class="rounded-circle"/>
+        <img src="@(string .IsNullOrEmpty(_currentUser.ProfilePicture.Thumbnail) ? PicResourcePath.PERSON_PIC_PATH : _currentUser.ProfilePicture.Thumbnail)" class="rounded-circle"/>
     </span>
     @if (_isMenuSwitched) {
         <ul class="list-group" @onmouseleave=@SwitchMenu>

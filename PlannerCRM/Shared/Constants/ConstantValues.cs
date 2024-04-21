@@ -15,13 +15,13 @@ public static class ConstantValues
 
     public const int MIN_ACTIVITY_MONTH_PERIOD = 1;
     public const int MAX_ACTIVITY_MONTH_PERIOD = 6;
-    
+
     public const string ADMIN_EMAIL = "account.manager@gmail.com";
     public const Roles ADMIN_ROLE = Roles.ACCOUNT_MANAGER;
-    
+
     public const int MAJOR_AGE = 18;
     public const int MAX_AGE = 55;
-    
+
     public const int INVALID_ID = -1;
     public const int MINIMUM_MONTH = 1;
     public const int MAXIMUM_MONTH = 6;
@@ -37,7 +37,7 @@ public static class ConstantValues
     public const string LOGIN_PAGE_SHORT = "/";
     public const string LOGIN_PAGE_LONG = "/login";
     public const string MODIFY = "Modifica";
-    public const string CANCEL= "Annulla";
-    public const string COLON= ":";
+    public const string CANCEL = "Annulla";
+    public const string COLON = ":";
 
 }

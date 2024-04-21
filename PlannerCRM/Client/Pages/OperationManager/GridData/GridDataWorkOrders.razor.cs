@@ -13,7 +13,7 @@ public partial class GridDataWorkOrders : ComponentBase
     private bool _isEditWorkOrderClicked;
     private bool _isDeleteWorkOrderClicked;
 
-    private int _workOrderId;
+    private string _workOrderId;
     private string _orderKey;
 
     protected override void OnInitialized()
@@ -94,7 +94,7 @@ public partial class GridDataWorkOrders : ComponentBase
         _workOrderId = id;
     }
 
-    private void OnClickTableRow(int workOrderId)
+    private void OnClickTableRow(string workOrderId)
     {
         _trIsClicked = !_trIsClicked;
         _currentWorkOrder = WorkOrders

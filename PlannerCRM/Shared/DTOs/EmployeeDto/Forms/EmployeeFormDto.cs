@@ -14,7 +14,7 @@ public class EmployeeFormDto
     public string LastName { get; set; }
 
     [StrongPasswordValidator(PASS_MIN_LENGTH, PASS_MAX_LENGTH,
-        ErrorMessage=""" Campo "Password" non valido. Riprovare. """)]
+        ErrorMessage = """ Campo "Password" non valido. Riprovare. """)]
     [Required(ErrorMessage = """Campo "Password" richiesto""")]
     public string Password { get; set; }
 
@@ -25,12 +25,12 @@ public class EmployeeFormDto
     public string OldEmail { get; set; }
 
     public bool IsDeleted { get; set; }
-    
+
     [StartDateRange(ErrorMessage = """La data d'inizio non può essere oltre la data di oggi.""")]
     [Required(ErrorMessage = """ Campo "Data d'inizio" richiesto. """)]
     public DateTime? StartDate { get; set; }
 
-    [BirthDayRange(MAJOR_AGE, MAX_AGE,  
+    [BirthDayRange(MAJOR_AGE, MAX_AGE,
         ErrorMessage = """Il dipendente deve avere tra i 18 e i 55 anni.""")]
     [Required(ErrorMessage = """ Campo "Data di nascita" richiesto. """)]
     public DateTime? BirthDay { get; set; }

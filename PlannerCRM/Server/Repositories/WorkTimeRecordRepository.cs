@@ -118,7 +118,7 @@ public class WorkTimeRecordRepository
         }
     }
 
-    public async Task<WorkTimeRecordViewDto> GetAsync(int workOrderId, int activityId, string employeeId)
+    public async Task<WorkTimeRecordViewDto> GetAsync(string workOrderId, string activityId, string employeeId)
     {
         var hasElements = await _dbContext.WorkTimeRecords
             .AnyAsync(wtr =>

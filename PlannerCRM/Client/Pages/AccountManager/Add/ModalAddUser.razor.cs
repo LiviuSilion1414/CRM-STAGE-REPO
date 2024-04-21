@@ -8,18 +8,20 @@ public partial class ModalAddUser : ComponentBase
     [Parameter] public string Title { get; set; }
 
     [Inject] public AccountManagerCrudService AccountManagerService { get; set; }
-    [Inject] public NavigationLockService NavigationUtil { get; set; } 
-    [Inject] public NavigationManager NavManager { get; set; } 
-    
+    [Inject] public NavigationLockService NavigationUtil { get; set; }
+    [Inject] public NavigationManager NavManager { get; set; }
+
     private EmployeeFormDto _model;
     private string _currentPage;
-    
-    protected override void OnInitialized() {
+
+    protected override void OnInitialized()
+    {
         _model = new();
         _currentPage = NavigationUtil.GetCurrentPage();
     }
 
-    private async Task OnClickAddAsync(EmployeeFormDto returnedModel) {
+    private async Task OnClickAddAsync(EmployeeFormDto returnedModel)
+    {
         await AccountManagerService.AddEmployeeAsync(returnedModel);
 
         NavManager.NavigateTo(_currentPage, true);

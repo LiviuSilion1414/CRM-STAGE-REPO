@@ -16,7 +16,7 @@ public partial class ClientsList : ComponentBase
 
     private bool _isCancelClicked;
 
-    private int _clientId;
+    private string _clientId;
     private int _collectionSize;
 
     protected override async Task OnInitializedAsync()

@@ -13,7 +13,7 @@ public partial class ProjectManager : ComponentBase
     private List<WorkOrderViewDto> _workOrders;
     private List<WorkOrderViewDto> _filteredList;
 
-    private Dictionary<string, Action> _filters => new() { 
+    private Dictionary<string, Action> _filters => new() {
         { "Tutti", OnClickAll },
         { "Creati", OnClickSortCreated },
         { "Inesistenti", OnClickSortNotCreated }
@@ -21,7 +21,8 @@ public partial class ProjectManager : ComponentBase
 
     private int _collectionSize;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _filteredList = new();
         _workOrders = new();
     }
@@ -29,48 +30,59 @@ public partial class ProjectManager : ComponentBase
     protected override async Task OnInitializedAsync()
         => await FetchDataAsync();
 
-    private async Task FetchDataAsync(int limit = 0, int offset = 5) {
+    private async Task FetchDataAsync(int limit = 0, int offset = 5)
+    {
         _collectionSize = await ProjectManagerService.GetWorkOrderCostsCollectionSizeAsync();
         _workOrders = await ProjectManagerService.GetWorkOrdersCostsPaginatedAsync(limit, offset);
 
         _filteredList = new(_workOrders);
     }
 
-    private void OnClickAll() {
+    private void OnClickAll()
+    {
         _filteredList = new(_workOrders);
 
         StateHasChanged();
     }
 
-    private void HandleSearchedElements(string query) {
+    private void HandleSearchedElements(string query)
+    {
         _filteredList = _workOrders
-            .Where(wo => wo.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+            .Where(wo => wo.Name.Contains(query, string Comparison.OrdinalIgnoreCase))
             .ToList();
 
         StateHasChanged();
     }
 
-    private void OnClickSortCreated() {
-        try {
+    private void OnClickSortCreated()
+    {
+        try
+        {
             _filteredList = _workOrders
                 .Where(wo => wo.IsInvoiceCreated)
                 .ToList();
 
             StateHasChanged();
 
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             Logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
         }
     }
 
-    private void OnClickSortNotCreated() {
-        try {
+    private void OnClickSortNotCreated()
+    {
+        try
+        {
             _filteredList = _workOrders
                 .Where(wo => !wo.IsInvoiceCreated)
                 .ToList();
 
             StateHasChanged();
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             Logger.LogError("\nError: {0} \n\nMessage: {1}", exc.StackTrace, exc.Message);
         }
     }

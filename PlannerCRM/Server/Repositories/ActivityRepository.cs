@@ -71,7 +71,7 @@ public class ActivityRepository
         }
     }
 
-    public async Task DeleteAsync(string Id)
+    public async Task DeleteAsync(string id)
     {
         try
         {
@@ -182,7 +182,7 @@ public class ActivityRepository
         }
     }
 
-    public async Task<ActivityViewDto> GetForViewByIdAsync(string Id)
+    public async Task<ActivityViewDto> GetForViewByIdAsync(string id)
     {
         return await _dbContext.Activities
             .Select(ac => new ActivityViewDto
@@ -234,7 +234,7 @@ public class ActivityRepository
             .SingleAsync(ac => ac.Id == id);
     }
 
-    public async Task<ActivityFormDto> GetForEditByIdAsync(int activityId)
+    public async Task<ActivityFormDto> GetForEditByIdAsync(string activityId)
     {
         return await _dbContext.Activities
             .Where(ac => ac.Id == activityId &&
@@ -294,7 +294,7 @@ public class ActivityRepository
             .FirstAsync(ac => ac.Id == activityId);
     }
 
-    public async Task<ActivityDeleteDto> GetForDeleteByIdAsync(string Id)
+    public async Task<ActivityDeleteDto> GetForDeleteByIdAsync(string id)
     {
         return await _dbContext.Activities
             .Select(ac => new ActivityDeleteDto
@@ -431,7 +431,7 @@ public class ActivityRepository
             .ToListAsync();
     }
 
-    public async Task<List<ActivityViewDto>> GetActivitiesPerWorkOrderAsync(int workOrderId)
+    public async Task<List<ActivityViewDto>> GetActivitiesPerWorkOrderAsync(string workOrderId)
     {
         return await _dbContext.Activities
             .Where(ac => ac.WorkOrderId == workOrderId)

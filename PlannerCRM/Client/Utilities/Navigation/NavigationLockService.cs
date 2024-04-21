@@ -19,11 +19,11 @@ public class NavigationLockService
     public const bool ConfirmedExternalExit = true;
 
     public NavigationLockService(
-        IJSRuntime js, 
+        IJSRuntime js,
         NavigationManager navigationManager,
         CurrentUserInfoService currentUserInfoService,
         AuthenticationStateService authStateService
-    ) 
+    )
     {
         _js = js;
         _navigationManager = navigationManager;
@@ -32,35 +32,42 @@ public class NavigationLockService
         _currentUser = new();
         _currentEmployee = new();
     }
-    
-    public async Task ConfirmInternalExit(LocationChangingContext context) {
+
+    public async Task ConfirmInternalExit(LocationChangingContext context)
+    {
         var confirmed = await _js
             .InvokeAsync<bool>("window.confirm", "Changes that you made may not be saved. Continue?");
 
-        if (!confirmed) {
+        if (!confirmed)
+        {
             context.PreventNavigation();
         }
     }
 
-    public async Task<CurrentUser> GetCurrentUserAsync() {
+    public async Task<CurrentUser> GetCurrentUserAsync()
+    {
         return await _authStateService.GetCurrentUserAsync();
     }
 
     public async Task<bool> IsUserAuthenticated()
         => (await GetCurrentUserAsync()).IsAuthenticated;
 
-    public string GetCurrentPage() {
+    public string GetCurrentPage()
+    {
         return _navigationManager.Uri.Replace(_navigationManager.BaseUri, "/");
     }
 
-    public string BuildNavigationUrl(string role, string employeeId) {
-        if (!string.IsNullOrEmpty(role) && Enum.TryParse(role, out Roles parsedRole)) {
+    public string BuildNavigationUrl(string role, string employeeId)
+    {
+        if (!string.IsNullOrEmpty(role) && Enum.TryParse(role, out Roles parsedRole))
+        {
             var url = parsedRole
-                .ToString()
+                .Tostring()
                 .ToLower()
                 .Replace('_', '-');
 
-            if (parsedRole == Roles.SENIOR_DEVELOPER || parsedRole == Roles.JUNIOR_DEVELOPER) {
+            if (parsedRole == Roles.SENIOR_DEVELOPER || parsedRole == Roles.JUNIOR_DEVELOPER)
+            {
                 url += $"/{employeeId}";
             }
 
@@ -70,15 +77,18 @@ public class NavigationLockService
         return string.Empty;
     }
 
-    public async Task HandleAuthenticationAndNavigationAsync() {
+    public async Task HandleAuthenticationAndNavigationAsync()
+    {
         var authState = await _authStateService.GetAuthenticationStateAsync();
         _currentUser = await _authStateService.GetCurrentUserAsync();
         _isAuthenticated = authState.User.Identity.IsAuthenticated;
 
-        if (_isAuthenticated) {
+        if (_isAuthenticated)
+        {
             _userRole = await _currentUserInfoService.GetCurrentUserRoleAsync();
 
-            if (_currentUser.UserName != ConstantValues.ADMIN_EMAIL) {
+            if (_currentUser.UserName != ConstantValues.ADMIN_EMAIL)
+            {
                 _currentEmployee = await _currentUserInfoService.GetCurrentEmployeeIdAsync(_currentUser.UserName);
             }
 

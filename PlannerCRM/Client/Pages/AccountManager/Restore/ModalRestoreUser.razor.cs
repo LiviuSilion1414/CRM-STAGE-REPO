@@ -3,7 +3,7 @@ using PlannerCRM.Client.Utilities.Navigation;
 namespace PlannerCRM.Client.Pages.AccountManager.Restore;
 
 [Authorize(Roles = nameof(Roles.ACCOUNT_MANAGER))]
-public partial class ModalRestoreUser : ComponentBase 
+public partial class ModalRestoreUser : ComponentBase
 {
     [Parameter] public string Id { get; set; }
     [Parameter] public string Title { get; set; }
@@ -18,20 +18,23 @@ public partial class ModalRestoreUser : ComponentBase
     private bool _isCancelClicked;
     private string _currentPage;
 
-    protected override async Task OnInitializedAsync() => 
+    protected override async Task OnInitializedAsync() =>
         _employee = await AccountManagerService.GetEmployeeForRestoreAsync(Id);
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         _employee = new();
         _currentPage = _currentPage = NavigationUtil.GetCurrentPage();
     }
 
-    private void OnClickModalCancel() {
+    private void OnClickModalCancel()
+    {
         _isCancelClicked = !_isCancelClicked;
         NavManager.NavigateTo(_currentPage);
     }
 
-    private async Task OnClickConfirm() {
+    private async Task OnClickConfirm()
+    {
         await AccountManagerService.RestoreEmployeeAsync(Id);
         NavManager.NavigateTo(_currentPage, true);
     }

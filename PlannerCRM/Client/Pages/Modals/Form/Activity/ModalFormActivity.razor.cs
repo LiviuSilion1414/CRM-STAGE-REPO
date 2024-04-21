@@ -28,15 +28,17 @@ public partial class ModalFormActivity : ComponentBase
     private bool _isError;
     private string _message;
     private bool _isCancelClicked;
-    
+
     private bool _hideWorkOrdersList;
 
     private bool _hideEmployeesList;
 
     private bool _workOrderHasBeenSet;
 
-    protected override void OnInitialized() {
-        Model = new() {
+    protected override void OnInitialized()
+    {
+        Model = new()
+        {
             EmployeeActivity = new(),
             ViewEmployeeActivity = new(),
             DeleteEmployeeActivity = new(),
@@ -47,22 +49,30 @@ public partial class ModalFormActivity : ComponentBase
         _employees = new();
         _hideWorkOrdersList = true;
         _hideEmployeesList = true;
-    } 
+    }
 
-    private async Task HandleSearchedWorkOrders(string query) {
-        if (string.IsNullOrEmpty(query)) {
+    private async Task HandleSearchedWorkOrders(string query)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
             OnClickInvalidSubmit();
-        } else {
+        }
+        else
+        {
             _workOrders = await OperationManagerService.SearchWorkOrderAsync(query);
         }
 
         StateHasChanged();
     }
 
-    private async Task HandleSearchedEmployees(string query) {
-        if (string.IsNullOrEmpty(query)) {
+    private async Task HandleSearchedEmployees(string query)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
             OnClickInvalidSubmit();
-        } else {
+        }
+        else
+        {
             _employees = await OperationManagerService.SearchEmployeeAsync(query);
         }
 
@@ -70,20 +80,21 @@ public partial class ModalFormActivity : ComponentBase
     }
 
 
-    private void HandleChosenWorkOrder(WorkOrderSelectDto workOrderSelect) {
+    private void HandleChosenWorkOrder(WorkOrderSelectDto workOrderSelect)
+    {
         Model.WorkOrderId = workOrderSelect.Id;
         Model.SelectedWorkOrder = workOrderSelect.Name;
         Model.ClientName = workOrderSelect.ClientName;
         _workOrderHasBeenSet = !_workOrderHasBeenSet;
     }
-    
-    private void OnClickModalCancel() => 
+
+    private void OnClickModalCancel() =>
         _isCancelClicked = !_isCancelClicked;
 
-    private void ToggleWorkOrderListView() => 
+    private void ToggleWorkOrderListView() =>
         _hideWorkOrdersList = !_hideWorkOrdersList;
-    
-    private void ToggleEmployeesListView() => 
+
+    private void ToggleEmployeesListView() =>
         _hideEmployeesList = !_hideEmployeesList;
 
     private void OnClickHideBanner(bool hidden) => _isError = hidden;
@@ -103,16 +114,21 @@ public partial class ModalFormActivity : ComponentBase
     //    }
     //}
 
-    private void HandleChosenEmployee(EmployeeSelectDto employee) {
-        try { 
+    private void HandleChosenEmployee(EmployeeSelectDto employee)
+    {
+        try
+        {
             var contains = Model.EmployeeActivity
                 .Any(ea => ea.Employee.Id == employee.Id);
 
-            if (!contains) {
-                var activity = 
-                    new EmployeeActivityDto {
+            if (!contains)
+            {
+                var activity =
+                    new EmployeeActivityDto
+                    {
                         EmployeeId = employee.Id,
-                        Employee = new EmployeeSelectDto {
+                        Employee = new EmployeeSelectDto
+                        {
                             Id = employee.Id,
                             Email = employee.Email,
                             FirstName = employee.FirstName,
@@ -127,65 +143,78 @@ public partial class ModalFormActivity : ComponentBase
                             }
                         },
                         ActivityId = Model.Id,
-                        Activity = new ActivitySelectDto {
+                        Activity = new ActivitySelectDto
+                        {
                             Id = Model.Id,
                             Name = Model.Name,
-                            StartDate = Model?.StartDate 
+                            StartDate = Model?.StartDate
                                 ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG),
                             FinishDate = Model.FinishDate
                                 ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG),
-                            WorkOrderId = Model.WorkOrderId 
+                            WorkOrderId = Model.WorkOrderId
                                 ?? throw new NullReferenceException(ExceptionsMessages.NULL_ARG)
                         },
-                        
+
                     };
 
                 Model.EmployeeActivity.Add(activity);
                 Model.ViewEmployeeActivity.Add(activity);
             }
             ToggleEmployeesListView();
-        } catch (NullReferenceException exc) {
+        }
+        catch (NullReferenceException exc)
+        {
             Logger.LogError("Error: { } Message: { }", exc.StackTrace, exc.Message);
             _message = exc.Message;
             _isError = true;
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             Logger.LogError("Error: { } Message: { }", exc.StackTrace, exc.Message);
             _message = exc.Message;
             _isError = true;
         }
     }
 
-    private void OnClickRemoveAsSelected(EmployeeSelectDto employee) {
+    private void OnClickRemoveAsSelected(EmployeeSelectDto employee)
+    {
         Model.DeleteEmployeeActivity = AddToDeleteEnumerable(Model.ViewEmployeeActivity, employee);
-        
+
         RemoveFromEnumerable(Model.EmployeeActivity, employee);
         RemoveFromEnumerable(Model.ViewEmployeeActivity, employee);
-    }    
+    }
 
-    private static void RemoveFromEnumerable(HashSet<EmployeeActivityDto> employeeActivities, EmployeeSelectDto employee) {
+    private static void RemoveFromEnumerable(HashSet<EmployeeActivityDto> employeeActivities, EmployeeSelectDto employee)
+    {
         employeeActivities
             .Where(ea => ea.EmployeeId == employee.Id)
             .ToList()
             .ForEach(ea => employeeActivities.Remove(ea));
     }
 
-    private static HashSet<EmployeeActivityDto> AddToDeleteEnumerable(HashSet<EmployeeActivityDto> lookupList, EmployeeSelectDto employee) {
+    private static HashSet<EmployeeActivityDto> AddToDeleteEnumerable(HashSet<EmployeeActivityDto> lookupList, EmployeeSelectDto employee)
+    {
         return lookupList
             .Where(ea => ea.EmployeeId == employee.Id)
             .ToHashSet();
     }
 
-    private void OnClickInvalidSubmit() {
+    private void OnClickInvalidSubmit()
+    {
         _isError = true;
         _message = ExceptionsMessages.EMPTY_FIELDS;
     }
 
-    private async Task OnClickModalConfirm() {
+    private async Task OnClickModalConfirm()
+    {
         var isValid = ValidatorService.Validate(Model, out _errors);
 
-        if (isValid) {
+        if (isValid)
+        {
             await GetValidatedModel.InvokeAsync(Model);
-        } else {
+        }
+        else
+        {
             CustomValidator.DisplayErrors(_errors);
             OnClickInvalidSubmit();
         }

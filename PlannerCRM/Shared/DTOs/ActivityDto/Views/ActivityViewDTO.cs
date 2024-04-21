@@ -6,7 +6,7 @@ public class ActivityViewDto
     public string Name { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }
-    public int WorkOrderId { get; set; }
+    public string WorkOrderId { get; set; }
     public string WorkOrderName { get; init; }
     public string ClientName { get; init; }
 

@@ -7,5 +7,5 @@ public partial class SearchBox : ComponentBase
     private string _query = string.Empty;
 
     private async Task Search()
-        =>  await GetSearchedItems.InvokeAsync(_query);
+        => await GetSearchedItems.InvokeAsync(_query);
 }

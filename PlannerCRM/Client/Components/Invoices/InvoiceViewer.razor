@@ -1,7 +1,7 @@
 @page "/invoices/{workOrderId:int}"
 
 <div class="text-left">
-    <strong>PlannerCRM - @(DateTime.Now.ToString("dd/MM/yyyy"))</strong>
+    <strong>PlannerCRM - @(DateTime.Now.Tostring ("dd/MM/yyyy"))</strong>
 </div>
 
 <div class="titles">
@@ -32,11 +32,11 @@
         </div>
         <div class="workorder-info-dates">
             <div>
-                <strong>Data inizio:</strong> @_invoice.StartDate.ToString("dd/MM/yyyy")
+                <strong>Data inizio:</strong> @_invoice.StartDate.Tostring ("dd/MM/yyyy")
             </div> 
             <br>
             <div>
-                <strong>Data fine:</strong> @_invoice.FinishDate.ToString("dd/MM/yyyy")
+                <strong>Data fine:</strong> @_invoice.FinishDate.Tostring ("dd/MM/yyyy")
             </div>
             <br>
             <div>
@@ -64,8 +64,8 @@
             @foreach (var ac in _invoice.Activities) {
                 <tr>
                     <td>@ac.Name</td>
-                    <td>@ac.StartDate.ToString("dd/MM/yyyy")</td>
-                    <td>@ac.FinishDate.ToString("dd/MM/yyyy")</td>
+                    <td>@ac.StartDate.Tostring ("dd/MM/yyyy")</td>
+                    <td>@ac.FinishDate.Tostring ("dd/MM/yyyy")</td>
                     <td>@_invoice.CostPerMonth</td>
                 </tr>
             }

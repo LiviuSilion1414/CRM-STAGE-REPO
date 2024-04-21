@@ -15,10 +15,10 @@ public class WorkTimeRecordFormDto
     public decimal TotalPrice { get; set; }
 
     [Required(ErrorMessage = """ Campo "Attività" richiesto. """)]
-    public int ActivityId { get; set; }
+    public string ActivityId { get; set; }
 
     [Required(ErrorMessage = """ Campo "Commessa" richiesto. """)]
-    public int WorkOrderId { get; set; }
+    public string WorkOrderId { get; set; }
 
     [Required(ErrorMessage = """ Campo "Impiegato" richiesto. """)]
     public string EmployeeId { get; set; }

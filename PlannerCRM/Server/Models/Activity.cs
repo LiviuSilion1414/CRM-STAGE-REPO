@@ -9,5 +9,5 @@ public class Activity
     public bool IsDeleted { get; set; }
 
     public HashSet<EmployeeActivity> EmployeeActivity { get; set; }
-    public int WorkOrderId { get; set; }
+    public string WorkOrderId { get; set; }
 }

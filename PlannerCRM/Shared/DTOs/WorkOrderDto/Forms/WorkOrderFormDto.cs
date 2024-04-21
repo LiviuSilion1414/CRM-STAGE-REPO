@@ -17,7 +17,7 @@ public partial class WorkOrderFormDto
     public DateTime? FinishDate { get; set; }
 
     [Required(ErrorMessage = """ Campo "Cliente" richiesto """)]
-    public int ClientId { get; set; }
+    public string ClientId { get; set; }
 
     public string ClientName { get; set; }
     public bool IsOnEdit { get; init; }

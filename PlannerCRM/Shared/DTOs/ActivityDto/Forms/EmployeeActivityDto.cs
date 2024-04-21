@@ -7,6 +7,6 @@ public class EmployeeActivityDto
     public string EmployeeId { get; set; }
     public EmployeeSelectDto Employee { get; set; }
 
-    public int ActivityId { get; set; }
+    public string ActivityId { get; set; }
     public ActivitySelectDto Activity { get; set; }
 }

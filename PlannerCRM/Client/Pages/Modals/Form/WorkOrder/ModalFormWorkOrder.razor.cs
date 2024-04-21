@@ -28,7 +28,8 @@ public partial class ModalFormWorkOrder : ComponentBase
 
     private bool _hideclientsList;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         Model = new();
         _editContext = new(Model);
         _clients = new();
@@ -37,49 +38,65 @@ public partial class ModalFormWorkOrder : ComponentBase
         _currentPage = _currentPage = NavigationUtil.GetCurrentPage();
     }
 
-    private void OnClickModalCancel() {
+    private void OnClickModalCancel()
+    {
         _isCancelClicked = !_isCancelClicked;
         NavManager.NavigateTo(_currentPage);
     }
 
     private void OnClickHideBanner(bool hidden) => _isError = hidden;
 
-    private async Task HandleSearchedElements(string query) {
-        if (string.IsNullOrEmpty(query)) {
+    private async Task HandleSearchedElements(string query)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
             OnClickInvalidSubmit();
-        } else {
+        }
+        else
+        {
             _clients = await OperationManagerService.SearchClientAsync(query);
         }
 
         StateHasChanged();
     }
 
-    private void OnClickInvalidSubmit() {
+    private void OnClickInvalidSubmit()
+    {
         _isError = true;
         _errorMessage = ExceptionsMessages.EMPTY_FIELDS;
     }
 
-    private void OnClickSetAsClient(ClientViewDto client) {
+    private void OnClickSetAsClient(ClientViewDto client)
+    {
         _isClientSelected = !_isClientSelected;
-        Model.ClientId = client.Id; 
+        Model.ClientId = client.Id;
         Model.ClientName = client.Name;
         _hideclientsList = !_hideclientsList;
     }
 
-    private async Task OnClickModalConfirm() {
-        try {
-            var isValid = ValidatorService.Validate(Model, out _errors); 
-            if (isValid) {
+    private async Task OnClickModalConfirm()
+    {
+        try
+        {
+            var isValid = ValidatorService.Validate(Model, out _errors);
+            if (isValid)
+            {
                 await GetValidatedModel.InvokeAsync(Model);
-            } else {
+            }
+            else
+            {
                 CustomValidator.DisplayErrors(_errors);
                 OnClickInvalidSubmit();
             }
-        } catch (NullReferenceException exc) {
+        }
+        catch (NullReferenceException exc)
+        {
             Logger.LogError("Error: { } Message: { }", exc.StackTrace, exc.Message);
             _errorMessage = exc.Message;
             _isError = true;
-        } catch (Exception exc) {
+        }
+        catch (Exception exc)
+        {
             Logger.LogError("Error: { } _message: { }", exc.StackTrace, exc.Message);
             _errorMessage = exc.Message;
             _isError = true;

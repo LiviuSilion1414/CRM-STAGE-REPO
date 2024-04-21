@@ -2,7 +2,7 @@ namespace PlannerCRM.Shared.Constants;
 
 public static class ExceptionsMessages
 {
-    public const string EMPTY_STRING = "Oggetto stringa vuoto.";
+    public const string EMPTY_string = "Oggetto string a vuoto.";
 
     public const string NULL_OBJECT = "Oggetto dto null.";
     public const string NULL_PARAM = "Parametri dto null.";
@@ -14,7 +14,7 @@ public static class ExceptionsMessages
     public const string OBJECT_NOT_FOUND = "Oggetto non trovato.";
     public const string WORKORDER_NOT_FOUND = "Nessuna commessa trovata.";
     public const string EMPLOYEE_NOT_FOUND = "Dipendenti non trovati.";
-    
+
     public const string NOT_ASSEGNABLE_ROLE = "Impossibile assegnare questo ruolo.";
 
     public const string IMPOSSIBLE_ADD = "Impossibile aggiungere l'oggetto.";

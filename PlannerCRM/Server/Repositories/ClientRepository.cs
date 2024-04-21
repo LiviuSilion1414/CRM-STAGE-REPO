@@ -114,7 +114,7 @@ public class ClientRepository
         }
     }
 
-    public async Task<ClientViewDto> GetClientForViewByIdAsync(int clientId)
+    public async Task<ClientViewDto> GetClientForViewByIdAsync(string clientId)
     {
         return await _dbContext.Clients
             .Where(cl => cl.Id == clientId)
@@ -198,7 +198,7 @@ public class ClientRepository
             .ToListAsync();
     }
 
-    public async Task<List<ClientViewDto>> SearchClientAsync(int clientId)
+    public async Task<List<ClientViewDto>> SearchClientAsync(string clientId)
     {
         return await _dbContext.Clients
             .Select(cl => new ClientViewDto

@@ -7,6 +7,6 @@ public class EmployeeActivity
     public string EmployeeId { get; set; }
     public Employee Employee { get; set; }
 
-    public int ActivityId { get; set; }
+    public string ActivityId { get; set; }
     public Activity Activity { get; set; }
 }

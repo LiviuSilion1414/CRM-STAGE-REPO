@@ -13,7 +13,7 @@ public partial class ModalShowUserDetails : ComponentBase
     [Inject] public NavigationLockService NavigationUtil { get; set; }
 
     private readonly bool _isDisabled = true;
-    
+
     private EmployeeViewDto _model;
     private bool _isCancelClicked;
 
@@ -22,17 +22,21 @@ public partial class ModalShowUserDetails : ComponentBase
 
     protected override async Task OnInitializedAsync() =>
         _model = await AccountManagerService.GetEmployeeForViewByIdAsync(Id);
-    
-    protected override void OnInitialized() {
-        _model = new() {
-            ProfilePicture = new() {
+
+    protected override void OnInitialized()
+    {
+        _model = new()
+        {
+            ProfilePicture = new()
+            {
                 EmployeeInfo = new()
             }
         };
         _currentPage = NavigationUtil.GetCurrentPage();
     }
 
-    private void OnClickModalCancel() {
+    private void OnClickModalCancel()
+    {
         _isCancelClicked = !_isCancelClicked;
         NavManager.NavigateTo(_currentPage);
     }

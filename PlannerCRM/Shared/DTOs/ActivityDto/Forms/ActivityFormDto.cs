@@ -13,7 +13,7 @@ public partial class ActivityFormDto
     [Required(ErrorMessage = """ Campo "Data di fine" richiesto. """)]
     public DateTime? FinishDate { get; set; }
 
-    public int? WorkOrderId { get; set; }
+    public string WorkOrderId { get; set; }
 
     public HashSet<EmployeeActivityDto> EmployeeActivity { get; set; }
 
